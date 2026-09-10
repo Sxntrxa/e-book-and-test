@@ -1,0 +1,86 @@
+"use client";
+
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { categories } from '@/data/books';
+import { BookOpen, ArrowLeft, FolderOpen } from 'lucide-react';
+
+export default function CategoryPage() {
+  const params = useParams();
+  const router = useRouter();
+  const categoryId = decodeURIComponent(params.categoryId as string);
+  
+  const category = categories.find(c => c.id === categoryId);
+
+  if (!category) {
+    return (
+      <div className="flex flex-col h-screen w-full items-center justify-center bg-gray-50 text-gray-800">
+        <h1 className="text-2xl mb-4 text-red-500 font-bold">ไม่พบหมวดหมู่นี้</h1>
+        <Link href="/" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+          กลับหน้าแรก
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-gray-50 text-gray-900 font-sans">
+      {/* Header */}
+      <header className="bg-blue-900 text-white p-6 shadow-md relative">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => router.push('/')}
+              className="flex items-center gap-2 hover:text-blue-300 transition mr-4"
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <FolderOpen size={32} className="text-blue-300" />
+            <h1 className="text-2xl font-bold tracking-wide">หมวดหมู่: {category.title}</h1>
+          </div>
+          
+          {category.quizUrl && (
+            <a 
+              href={category.quizUrl}
+              className="bg-green-600 hover:bg-green-500 text-white px-5 py-2 rounded-full font-bold shadow-md transition-all transform hover:scale-105 flex items-center gap-2"
+            >
+              ทำแบบทดสอบ
+            </a>
+          )}
+        </div>
+      </header>
+
+      {/* Content */}
+      <div className="max-w-6xl mx-auto p-6 mt-6">
+        <h2 className="text-xl font-bold mb-6 text-gray-800 border-b-2 border-gray-200 pb-2 flex items-center justify-between">
+          <span>เลือกบทเรียนที่ต้องการอ่าน</span>
+          <span className="text-sm font-normal text-gray-500">ทั้งหมด {category.books.length} บท</span>
+        </h2>
+        
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          {category.books.map((book) => (
+            <Link 
+              href={`/read/${book.id}`} 
+              key={book.id}
+              className="group flex flex-col items-center bg-white rounded-lg p-3 shadow hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+            >
+              {/* หน้าปกจำลอง */}
+              <div className={`w-full aspect-[1/1.4] ${book.coverColor} rounded-md shadow-inner flex items-center justify-center mb-4 relative overflow-hidden`}>
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                <BookOpen size={48} className="text-white/50" />
+                <div className="absolute bottom-2 right-2 bg-black/40 text-white text-xs px-2 py-1 rounded">
+                  PDF
+                </div>
+              </div>
+              
+              {/* ชื่อหนังสือ/บทเรียน */}
+              <h3 className="text-sm font-semibold text-center line-clamp-2 text-gray-700 group-hover:text-blue-600 transition-colors">
+                {book.title}
+              </h3>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}

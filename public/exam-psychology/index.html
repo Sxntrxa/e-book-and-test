@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>PSY1002 จิตวิทยาเบื้องต้น</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #007AFF;
+            --accent-hover: #0066d6;
+            --bg: #F2F2F7;
+            --surface: rgba(255,255,255,0.8);
+            --surface-solid: #ffffff;
+            --text-primary: #1C1C1E;
+            --text-secondary: #8E8E93;
+            --text-tertiary: #AEAEB2;
+            --separator: rgba(60,60,67,0.12);
+            --fill: rgba(120,120,128,0.12);
+            --success: #34C759;
+            --danger: #FF3B30;
+            --warning: #FF9500;
+            --option-bg: rgba(120,120,128,0.08);
+            --option-hover: rgba(120,120,128,0.15);
+            --option-selected-bg: rgba(0,122,255,0.12);
+            --option-selected-border: var(--accent);
+            --card-shadow: 0 2px 16px rgba(0,0,0,0.06);
+            --blur: blur(20px);
+        }
+
+        [data-theme="dark"] {
+            --accent: #0A84FF;
+            --accent-hover: #409CFF;
+            --bg: #000000;
+            --surface: rgba(28,28,30,0.8);
+            --surface-solid: #1C1C1E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8E8E93;
+            --text-tertiary: #636366;
+            --separator: rgba(84,84,88,0.36);
+            --fill: rgba(120,120,128,0.24);
+            --option-bg: rgba(120,120,128,0.16);
+            --option-hover: rgba(120,120,128,0.28);
+            --option-selected-bg: rgba(10,132,255,0.2);
+            --card-shadow: 0 2px 16px rgba(0,0,0,0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            transition: background-color 0.4s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app {
+            max-width: 680px;
+            width: 100%;
+            padding-bottom: 40px;
+        }
+
+        /* ─── iOS Nav Bar ─── */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            margin-bottom: 8px;
+        }
+        .nav-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .nav-actions { display: flex; gap: 8px; }
+
+        .pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--fill);
+            border: none;
+            color: var(--accent);
+            padding: 7px 14px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .pill-btn:hover { background: var(--option-hover); }
+        .pill-btn:active { transform: scale(0.96); }
+
+        /* ─── iOS Large Title ─── */
+        .large-title {
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+        .subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* ─── iOS Grouped Cards ─── */
+        .card {
+            background: var(--surface);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: 16px;
+            transition: background 0.3s ease;
+        }
+        .card-header {
+            padding: 16px 20px 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        /* ─── Chapter Grid ─── */
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            padding: 12px 16px 16px;
+        }
+        .chapter-btn {
+            background: var(--fill);
+            border: none;
+            border-radius: 12px;
+            padding: 16px 12px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--accent);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .chapter-btn:hover { background: var(--option-hover); transform: translateY(-1px); }
+        .chapter-btn:active { transform: scale(0.97); }
+        .chapter-btn:disabled {
+            color: var(--text-tertiary);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        .chapter-btn:disabled:hover { transform: none; background: var(--fill); }
+
+        /* ─── iOS Action Buttons ─── */
+        .ios-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 24px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            min-width: 100px;
+        }
+        .ios-btn:active { transform: scale(0.97); }
+
+        .ios-btn-primary { background: var(--accent); color: white; }
+        .ios-btn-primary:hover { background: var(--accent-hover); }
+
+        .ios-btn-secondary { background: var(--fill); color: var(--accent); }
+        .ios-btn-secondary:hover { background: var(--option-hover); }
+
+        .ios-btn-danger { background: rgba(255,59,48,0.12); color: var(--danger); }
+        .ios-btn-danger:hover { background: rgba(255,59,48,0.2); }
+
+        .ios-btn-success { background: var(--success); color: white; }
+        .ios-btn-success:hover { background: #2DB84D; }
+
+        .ios-btn-ghost {
+            background: transparent;
+            color: var(--accent);
+            padding: 14px 16px;
+        }
+        .ios-btn-ghost:hover { background: var(--fill); }
+
+        /* ─── Count Picker ─── */
+        .count-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            padding: 16px 20px 20px;
+        }
+        .count-btn {
+            background: var(--fill);
+            border: 2px solid transparent;
+            border-radius: 14px;
+            padding: 18px 28px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            min-width: 100px;
+        }
+        .count-btn:hover { border-color: var(--accent); background: var(--option-selected-bg); }
+        .count-btn:active { transform: scale(0.96); }
+
+        /* ─── Quiz ─── */
+        .quiz-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+        .progress-track {
+            height: 4px;
+            background: var(--fill);
+            border-radius: 2px;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .question-card {
+            padding: 20px;
+        }
+        .question-text {
+            font-size: 19px;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        .options-list { display: flex; flex-direction: column; gap: 8px; }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--option-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+        .option-item:hover { background: var(--option-hover); }
+        .option-item.selected {
+            background: var(--option-selected-bg);
+            border-color: var(--accent);
+        }
+        .option-item:active { transform: scale(0.99); }
+
+        .option-radio {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--text-tertiary);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .option-item.selected .option-radio {
+            border-color: var(--accent);
+            background: var(--accent);
+        }
+        .option-item.selected .option-radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px 20px;
+            gap: 10px;
+        }
+        .quiz-nav-center { display: flex; gap: 8px; }
+
+        /* ─── Results ─── */
+        .score-ring {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            position: relative;
+        }
+        .score-ring svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            transform: rotate(-90deg);
+        }
+        .score-ring .ring-bg { stroke: var(--fill); }
+        .score-ring .ring-fg { transition: stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .score-number { font-size: 36px; font-weight: 700; z-index: 1; }
+        .score-label { font-size: 13px; color: var(--text-secondary); z-index: 1; font-weight: 500; }
+
+        .result-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .mistake-card {
+            background: var(--surface-solid);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--danger);
+        }
+        .mistake-q { font-weight: 600; margin-bottom: 8px; font-size: 15px; line-height: 1.5; }
+        .mistake-wrong { color: var(--danger); font-size: 14px; text-decoration: line-through; margin-bottom: 4px; }
+        .mistake-correct { color: var(--success); font-weight: 600; font-size: 14px; margin-bottom: 8px; }
+        .mistake-explain {
+            font-size: 13px;
+            color: var(--text-secondary);
+            background: var(--fill);
+            padding: 10px 12px;
+            border-radius: 8px;
+            line-height: 1.5;
+        }
+
+        /* ─── History ─── */
+        .history-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--separator);
+            cursor: default;
+        }
+        .history-item:last-child { border-bottom: none; }
+        .history-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .history-ch { font-size: 17px; font-weight: 600; }
+        .history-pts { font-size: 17px; font-weight: 700; }
+        .history-pts.good { color: var(--success); }
+        .history-pts.bad { color: var(--danger); }
+        .history-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+        .history-toggle-btn {
+            background: var(--fill);
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .history-toggle-btn:hover { background: var(--option-hover); }
+        .history-mistakes-detail { display: none; margin-top: 12px; }
+        .no-mistakes-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(52,199,89,0.12);
+            color: var(--success);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* ─── Screens ─── */
+        .screen { display: none; animation: fadeIn 0.3s ease; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ─── Section Title ─── */
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 0 4px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .text-center { text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <!-- Navbar -->
+    <div class="navbar">
+        <a href="/category/psychology-intro" style="text-decoration: none; color: var(--accent); font-weight: 600; padding: 6px 12px; border-radius: 20px; background: var(--option-bg); display: flex; align-items: center; gap: 4px;">
+            &#8592; กลับห้องสมุด
+        </a>
+        <span class="nav-title" style="margin-left: 10px;">PSY1002</span>
+        <div class="nav-actions">
+            <button class="pill-btn" onclick="showScreen('history')" id="history-btn">📊 ประวัติ</button>
+            <button class="pill-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
+        </div>
+    </div>
+
+    <!-- ═══ Screen: Selection ═══ -->
+    <div id="screen-selection" class="screen active">
+        <h1 class="large-title">จิตวิทยาเบื้องต้น</h1>
+        <p class="subtitle">เลือกบทที่ต้องการทดสอบ</p>
+        <div class="card">
+            <div class="card-header">บทเรียนทั้งหมด</div>
+            <div class="chapter-grid" id="chapter-buttons"></div>
+        </div>
+    </div>
+
+    <!-- ═══ Screen: Count Picker ═══ -->
+    <div id="screen-count" class="screen">
+        <div style="margin-bottom: 8px;">
+            <button class="ios-btn-ghost ios-btn" onclick="showScreen('selection')" style="padding: 8px 0; min-width: auto;">← กลับ</button>
+        </div>
+        <h1 class="large-title" id="count-title">บทที่ X</h1>
+        <p class="subtitle" id="count-info">เลือกจำนวนข้อที่ต้องการทำ</p>
+        <div class="card">
+            <div class="card-header">จำนวนข้อสอบ</div>
+            <div class="count-grid" id="count-options"></div>
+        </div>
+        <div class="card" style="margin-top: 16px;">
+            <div class="card-header">กำหนดเวลา (นาที)</div>
+            <div class="count-grid" id="time-options">
+                <button class="count-btn" id="t-60" onclick="selectTime(60)">60<br><span style="font-size:13px;opacity:0.7">นาที</span></button>
+                <button class="count-btn" id="t-90" onclick="selectTime(90)">90<br><span style="font-size:13px;opacity:0.7">นาที</span></button>
+                <button class="count-btn" id="t-120" onclick="selectTime(120)">120<br><span style="font-size:13px;opacity:0.7">นาที</span></button>
+                <button class="count-btn" id="t-0" onclick="selectTime(0)" style="border-color:var(--accent); background:var(--option-selected-bg)">ไม่จับเวลา</button>
+            </div>
+        </div>
+        <div style="margin-top: 24px; display: flex; justify-content: center;">
+            <button class="ios-btn ios-btn-primary" style="width: 100%; max-width: 300px; padding: 16px; font-size: 18px;" onclick="confirmStartQuiz()">เริ่มทำข้อสอบ</button>
+        </div>
+    </div>
+
+    <!-- ═══ Screen: Quiz ═══ -->
+    <div id="screen-quiz" class="screen">
+        <div class="card">
+            <div class="quiz-progress">
+                <span id="quiz-title">บทที่ X</span>
+                <span id="quiz-timer-display" style="display:none; margin-left:10px; font-weight:bold; color:var(--danger)">⏱ 00:00</span>
+                <span style="margin-left:auto">ข้อ <strong id="current-q-num">1</strong> / <span id="total-q-num">40</span></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="question-card">
+                <div class="question-text" id="question-text"></div>
+                <div class="options-list" id="options-container"></div>
+            </div>
+            <div class="quiz-nav">
+                <button class="ios-btn ios-btn-secondary" id="prev-btn" onclick="prevQuestion()">← ก่อนหน้า</button>
+                <button class="ios-btn ios-btn-danger" onclick="confirmBackToMenu()" style="font-size: 14px;">ออก</button>
+                <button class="ios-btn ios-btn-primary" id="next-btn" onclick="nextQuestion()">ถัดไป →</button>
+                <button class="ios-btn ios-btn-success" id="submit-btn" onclick="submitQuiz()" style="display: none;">ส่งคำตอบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ Screen: Results ═══ -->
+    <div id="screen-results" class="screen">
+        <div class="card text-center" style="padding: 30px 20px;">
+            <div class="score-ring" id="score-ring">
+                <svg viewBox="0 0 140 140">
+                    <circle class="ring-bg" cx="70" cy="70" r="60" fill="none" stroke-width="8"/>
+                    <circle class="ring-fg" id="ring-fg" cx="70" cy="70" r="60" fill="none" stroke-width="8" stroke-linecap="round"
+                        stroke-dasharray="377" stroke-dashoffset="377"/>
+                </svg>
+                <span class="score-number" id="score-text">0</span>
+                <span class="score-label" id="score-total">/ 40 คะแนน</span>
+            </div>
+            <div class="result-actions">
+                <button class="ios-btn ios-btn-primary" onclick="showScreen('selection')">กลับหน้าหลัก</button>
+                <button class="ios-btn ios-btn-secondary" onclick="showScreen('history')">ดูประวัติ</button>
+            </div>
+        </div>
+
+        <div id="mistakes-section" style="display:none; margin-top: 8px;">
+            <div class="section-title" style="color: var(--danger);">❌ สิ่งที่คุณพลาด</div>
+            <div id="mistakes-container"></div>
+        </div>
+    </div>
+
+    <!-- ═══ Screen: History ═══ -->
+    <div id="screen-history" class="screen">
+        <div style="margin-bottom: 8px;">
+            <button class="ios-btn-ghost ios-btn" onclick="showScreen('selection')" style="padding: 8px 0; min-width: auto;">← กลับ</button>
+        </div>
+        <h1 class="large-title">ประวัติการสอบ</h1>
+        <p class="subtitle">ดูผลการทดสอบย้อนหลัง</p>
+        <div style="margin-bottom: 16px;">
+            <button class="ios-btn ios-btn-danger" onclick="clearHistory()" style="font-size: 14px; padding: 10px 16px;">ล้างประวัติทั้งหมด</button>
+        </div>
+        <div class="card" id="history-list"></div>
+    </div>
+</div>
+
+<!-- Load question data -->
+<script src="questions_ch1.js"></script>
+<script src="questions_ch2.js"></script>
+<script src="questions_ch3.js"></script>
+<script src="questions_ch4.js"></script>
+<script src="questions_ch5.js"></script>
+<script src="questions_ch6.js"></script>
+<script src="questions_ch7.js"></script>
+<script src="questions_ch8.js"></script>
+<script src="questions_ch9.js"></script>
+<script src="questions_ch10.js"></script>
+<script src="questions_ch11.js"></script>
+<script src="questions_ch12.js"></script>
+
+<script>
+    const TOTAL_CHAPTERS = 12;
+    const STORAGE_KEY = 'psyQuizHistory';
+
+    // ─── Theme ───
+    function toggleTheme() {
+        const cur = document.documentElement.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('psyTheme', next);
+        document.getElementById('theme-btn').innerText = next === 'dark' ? '☀️' : '🌙';
+    }
+    const savedTheme = localStorage.getItem('psyTheme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('theme-btn').innerText = savedTheme === 'dark' ? '☀️' : '🌙';
+    });
+
+    // ─── State ───
+    let allQuizzes = [];
+    let currentQuestions = [];
+    let userAnswers = [];
+    let currentQuestionIndex = 0;
+    let currentChapter = 0;
+    let startTime = null;
+
+    // ─── Screen ───
+    function showScreen(name) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        // Force reflow for animation
+        const el = document.getElementById('screen-' + name);
+        void el.offsetWidth;
+        el.classList.add('active');
+        const hb = document.getElementById('history-btn');
+        hb.style.display = name === 'quiz' ? 'none' : 'inline-flex';
+        if (name === 'history') renderHistory();
+    }
+
+    // ─── Init ───
+    window.onload = function() {
+        const container = document.getElementById('chapter-buttons');
+        for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
+            const varName = 'questions_ch' + i;
+            let data = null;
+            try { data = eval(varName); } catch(e) {}
+            if (typeof data === 'undefined' || data === null) data = null;
+            allQuizzes[i] = data;
+
+            const btn = document.createElement('button');
+            btn.className = 'chapter-btn';
+            btn.innerText = 'บทที่ ' + i;
+            if (data !== null) {
+                btn.onclick = () => pickCount(i);
+            } else {
+                btn.disabled = true;
+                btn.innerText += '\n(ยังไม่พร้อม)';
+                btn.style.whiteSpace = 'pre-line';
+            }
+            container.appendChild(btn);
+        }
+        
+        const randBtn = document.createElement('button');
+        randBtn.className = 'chapter-btn';
+        randBtn.style.background = 'var(--accent)';
+        randBtn.style.color = '#fff';
+        randBtn.innerText = 'สุ่มรวมทุกบท';
+        randBtn.onclick = () => pickCount('all');
+        container.appendChild(randBtn);
+    };
+
+    // ─── Count Picker ───
+    let selectedTimerMinutes = 0;
+    let selectedCount = 0;
+
+    function selectTime(mins) {
+        selectedTimerMinutes = mins;
+        document.getElementById('t-60').style.background = 'var(--option-bg)';
+        document.getElementById('t-90').style.background = 'var(--option-bg)';
+        document.getElementById('t-120').style.background = 'var(--option-bg)';
+        document.getElementById('t-0').style.background = 'var(--option-bg)';
+        document.getElementById('t-60').style.borderColor = 'transparent';
+        document.getElementById('t-90').style.borderColor = 'transparent';
+        document.getElementById('t-120').style.borderColor = 'transparent';
+        document.getElementById('t-0').style.borderColor = 'transparent';
+        
+        const btn = document.getElementById('t-' + mins);
+        btn.style.background = 'var(--option-selected-bg)';
+        btn.style.borderColor = 'var(--accent)';
+    }
+
+    function selectCount(n) {
+        selectedCount = n;
+        document.querySelectorAll('#count-options .count-btn').forEach(b => {
+            b.style.background = 'var(--option-bg)';
+            b.style.borderColor = 'transparent';
+        });
+        const btn = document.getElementById('c-' + n);
+        if (btn) {
+            btn.style.background = 'var(--option-selected-bg)';
+            btn.style.borderColor = 'var(--accent)';
+        }
+    }
+
+    function confirmStartQuiz() {
+        if (selectedCount === 0) {
+            alert('กรุณาเลือกจำนวนข้อสอบ');
+            return;
+        }
+        startQuiz(currentChapter, selectedCount);
+    }
+
+    function pickCount(chapter) {
+        currentChapter = chapter;
+        let total = 0;
+        let optsArray = [];
+        
+        if (chapter === 'all') {
+            total = allQuizzes.reduce((acc, q) => acc + (q ? q.length : 0), 0);
+            document.getElementById('count-title').innerText = 'สุ่มรวมทุกบท';
+            document.getElementById('count-info').innerText = 'มีทั้งหมด ' + total + ' ข้อ เลือกจำนวนข้อที่ต้องการทำ';
+            optsArray = [50, 60, 70, 80, 90, 100];
+        } else {
+            total = allQuizzes[chapter].length;
+            document.getElementById('count-title').innerText = 'บทที่ ' + chapter;
+            document.getElementById('count-info').innerText = 'มีทั้งหมด ' + total + ' ข้อในบทนี้ เลือกจำนวนข้อที่ต้องการทำ';
+            optsArray = [10, 20, 30, 40];
+        }
+
+        const opts = document.getElementById('count-options');
+        opts.innerHTML = '';
+        if (chapter === 'all') {
+            opts.style.display = 'grid';
+            opts.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        } else {
+            opts.style.display = 'flex';
+            opts.style.gridTemplateColumns = 'none';
+        }
+        
+        optsArray.forEach(n => {
+            if (n <= total) {
+                const b = document.createElement('button');
+                b.className = 'count-btn';
+                b.id = 'c-' + n;
+                b.innerHTML = n + '<br><span style="font-size:13px;font-weight:500;opacity:0.7">ข้อ</span>';
+                b.onclick = () => selectCount(n);
+                opts.appendChild(b);
+            }
+        });
+        
+        selectCount(optsArray[0]); // default select first option
+        selectTime(0); // reset time
+        showScreen('count');
+    }
+
+    // ─── Quiz ───
+    let quizTimerInterval = null;
+    let quizTimeRemaining = 0;
+
+    function startQuiz(chapter, count) {
+        currentChapter = chapter;
+        let pool = [];
+        if (chapter === 'all') {
+            for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
+                if (allQuizzes[i]) pool = pool.concat(allQuizzes[i]);
+            }
+        } else {
+            pool = [...allQuizzes[chapter]];
+        }
+        
+        pool.sort(() => Math.random() - 0.5);
+        currentQuestions = pool.slice(0, count);
+        userAnswers = new Array(currentQuestions.length).fill(null);
+        currentQuestionIndex = 0;
+        startTime = new Date();
+        document.getElementById('quiz-title').innerText = chapter === 'all' ? 'สุ่มรวมทุกบท' : 'บทที่ ' + chapter;
+        document.getElementById('total-q-num').innerText = currentQuestions.length;
+        
+        // Timer logic
+        if (quizTimerInterval) clearInterval(quizTimerInterval);
+        const timerEl = document.getElementById('quiz-timer-display');
+        if (selectedTimerMinutes > 0) {
+            quizTimeRemaining = selectedTimerMinutes * 60;
+            timerEl.style.display = 'inline-block';
+            updateTimerDisplay();
+            quizTimerInterval = setInterval(() => {
+                quizTimeRemaining--;
+                updateTimerDisplay();
+                if (quizTimeRemaining <= 0) {
+                    clearInterval(quizTimerInterval);
+                    alert('หมดเวลา!');
+                    finishQuiz();
+                }
+            }, 1000);
+        } else {
+            timerEl.style.display = 'none';
+        }
+
+        showScreen('quiz');
+        renderQuestion();
+    }
+    
+    function updateTimerDisplay() {
+        const timerEl = document.getElementById('quiz-timer-display');
+        const m = Math.floor(quizTimeRemaining / 60).toString().padStart(2, '0');
+        const s = (quizTimeRemaining % 60).toString().padStart(2, '0');
+        timerEl.innerText = '⏱ ' + m + ':' + s;
+        if (quizTimeRemaining < 60) {
+            timerEl.style.color = 'var(--danger)';
+        } else {
+            timerEl.style.color = 'inherit';
+        }
+    }
+    
+    function finishQuiz() {
+        if (quizTimerInterval) clearInterval(quizTimerInterval);
+        const endTime = new Date();
+        const durSec = Math.floor((endTime - startTime) / 1000);
+        showScreen('results');
+        showResultsAndSave(endTime, durSec);
+    }
+
+    function renderQuestion() {
+        const q = currentQuestions[currentQuestionIndex];
+        document.getElementById('question-text').innerText = (currentQuestionIndex + 1) + '. ' + q.question;
+        document.getElementById('current-q-num').innerText = currentQuestionIndex + 1;
+        document.getElementById('progress-fill').style.width = ((currentQuestionIndex + 1) / currentQuestions.length * 100) + '%';
+
+        const oc = document.getElementById('options-container');
+        oc.innerHTML = '';
+        q.options.forEach((opt, i) => {
+            const d = document.createElement('div');
+            d.className = 'option-item' + (userAnswers[currentQuestionIndex] === i ? ' selected' : '');
+            d.innerHTML = '<div class="option-radio"></div><span>' + opt + '</span>';
+            d.onclick = () => { userAnswers[currentQuestionIndex] = i; renderQuestion(); };
+            oc.appendChild(d);
+        });
+
+        document.getElementById('prev-btn').style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
+        const isLast = currentQuestionIndex === currentQuestions.length - 1;
+        document.getElementById('next-btn').style.display = isLast ? 'none' : 'inline-flex';
+        document.getElementById('submit-btn').style.display = isLast ? 'inline-flex' : 'none';
+    }
+
+    function nextQuestion() { if (currentQuestionIndex < currentQuestions.length - 1) { currentQuestionIndex++; renderQuestion(); } }
+    function prevQuestion() { if (currentQuestionIndex > 0) { currentQuestionIndex--; renderQuestion(); } }
+
+    function submitQuiz() {
+        const unanswered = userAnswers.filter(a => a === null).length;
+        if (unanswered > 0 && !confirm('คุณยังไม่ได้ตอบอีก ' + unanswered + ' ข้อ ต้องการส่งคำตอบหรือไม่?')) return;
+        finishQuiz();
+    }
+
+    function confirmBackToMenu() {
+        if (confirm('ต้องการออกจากข้อสอบหรือไม่?\nข้อสอบที่ทำอยู่จะไม่ถูกบันทึก')) showScreen('selection');
+    }
+
+    // ─── Results ───
+    function fmt(d) { return d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }); }
+    function fmtDate(d) { return d.toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' }); }
+
+    function showResultsAndSave(endTime, durSec) {
+        let score = 0;
+        const mc = document.getElementById('mistakes-container');
+        mc.innerHTML = '';
+        const mistakesLog = [];
+
+        currentQuestions.forEach((q, i) => {
+            const ua = userAnswers[i];
+            if (ua === q.answer) { score++; }
+            else {
+                const uaText = ua !== null ? q.options[ua] : 'ไม่ได้ตอบ';
+                mistakesLog.push({ questionText: 'ข้อ ' + (i+1) + '. ' + q.question, userAnsText: uaText, correctAnsText: q.options[q.answer], explanation: q.explanation });
+                const d = document.createElement('div');
+                d.className = 'mistake-card';
+                d.innerHTML = '<div class="mistake-q">' + 'ข้อ '+(i+1)+'. '+q.question + '</div>'
+                    + '<div class="mistake-wrong">คุณตอบ: '+uaText+'</div>'
+                    + '<div class="mistake-correct">✓ '+q.options[q.answer]+'</div>'
+                    + (q.explanation ? '<div class="mistake-explain">'+q.explanation+'</div>' : '');
+                mc.appendChild(d);
+            }
+        });
+
+        // Score ring
+        document.getElementById('score-text').innerText = score;
+        document.getElementById('score-total').innerText = '/ ' + currentQuestions.length + ' คะแนน';
+        const pct = score / currentQuestions.length;
+        const circumference = 2 * Math.PI * 60; // r=60
+        const offset = circumference * (1 - pct);
+        const fg = document.getElementById('ring-fg');
+        fg.style.stroke = pct >= 0.8 ? 'var(--success)' : (pct < 0.5 ? 'var(--danger)' : 'var(--warning)');
+        fg.style.strokeDashoffset = circumference;
+        requestAnimationFrame(() => { requestAnimationFrame(() => { fg.style.strokeDashoffset = offset; }); });
+
+        document.getElementById('mistakes-section').style.display = mistakesLog.length > 0 ? 'block' : 'none';
+
+        // Save
+        const record = {
+            chapter: currentChapter, score, total: currentQuestions.length,
+            startDate: fmtDate(startTime), startTimeStr: fmt(startTime), endTimeStr: fmt(endTime),
+            durationMin: Math.floor(durSec / 60), durationSec: durSec % 60,
+            mistakes: mistakesLog
+        };
+        const hist = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        hist.unshift(record);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(hist));
+    }
+
+    // ─── History ───
+    function toggleMistakes(idx) {
+        const d = document.getElementById('ml-' + idx);
+        const b = document.getElementById('mb-' + idx);
+        if (d.style.display === 'none') { d.style.display = 'block'; b.innerText = 'ซ่อนข้อที่ผิด'; }
+        else { d.style.display = 'none'; b.innerText = 'ดูข้อที่ผิด'; }
+    }
+
+    function renderHistory() {
+        const list = document.getElementById('history-list');
+        list.innerHTML = '';
+        const hist = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        if (hist.length === 0) { list.innerHTML = '<div class="empty-state">ยังไม่มีประวัติการสอบ</div>'; return; }
+
+        hist.forEach((r, idx) => {
+            const pct = (r.score / r.total) * 100;
+            const cls = pct >= 80 ? 'good' : (pct < 50 ? 'bad' : '');
+            let mHtml = '';
+            if (r.mistakes && r.mistakes.length > 0) {
+                mHtml = '<div id="ml-' + idx + '" class="history-mistakes-detail">';
+                r.mistakes.forEach(m => {
+                    mHtml += '<div class="mistake-card">'
+                        + '<div class="mistake-q">' + m.questionText + '</div>'
+                        + '<div class="mistake-wrong">คุณตอบ: ' + m.userAnsText + '</div>'
+                        + '<div class="mistake-correct">✓ ' + m.correctAnsText + '</div>'
+                        + (m.explanation ? '<div class="mistake-explain">' + m.explanation + '</div>' : '')
+                        + '</div>';
+                });
+                mHtml += '</div>';
+            }
+
+            const item = document.createElement('div');
+            item.className = 'history-item';
+            item.innerHTML = '<div class="history-row">'
+                + '<span class="history-ch">บทที่ ' + r.chapter + '</span>'
+                + '<span class="history-pts ' + cls + '">' + r.score + '/' + r.total + '</span>'
+                + '</div>'
+                + '<div class="history-meta">' + r.startDate + ' • ' + r.startTimeStr + ' – ' + r.endTimeStr + ' • ใช้เวลา ' + r.durationMin + ' นาที ' + r.durationSec + ' วินาที</div>'
+                + (r.mistakes && r.mistakes.length > 0
+                    ? '<button class="history-toggle-btn" id="mb-' + idx + '" onclick="toggleMistakes(' + idx + ')">ดูข้อที่ผิด (' + r.mistakes.length + ')</button>'
+                    : '<span class="no-mistakes-badge">✓ ไม่พลาดเลย</span>')
+                + mHtml;
+            list.appendChild(item);
+        });
+    }
+
+    function clearHistory() {
+        if (confirm('ต้องการล้างประวัติทั้งหมดหรือไม่?')) {
+            localStorage.removeItem(STORAGE_KEY);
+            renderHistory();
+        }
+    }
+</script>
+
+</body>
+</html>
