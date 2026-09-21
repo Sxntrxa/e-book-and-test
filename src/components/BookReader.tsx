@@ -11,10 +11,11 @@ interface PageProps {
   pageNumber: number;
   pdfDocument: any;
   filterClass: string;
+  isRightHalf?: boolean;
 }
 
 const Page = React.forwardRef<HTMLDivElement, PageProps>(
-  ({ pageNumber, pdfDocument, filterClass }, ref) => {
+  ({ pageNumber, pdfDocument, filterClass, isRightHalf = false }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -35,9 +36,18 @@ const Page = React.forwardRef<HTMLDivElement, PageProps>(
           canvas.width = viewport.width;
           canvas.height = viewport.height;
           
-          canvas.style.width = '100%';
+          // ขยายความกว้าง canvas เป็น 2 เท่า (200%) เพื่อให้หน้าคู่แนวนอนเต็มพื้นที่
+          canvas.style.width = '200%';
           canvas.style.height = '100%';
           canvas.style.display = 'block';
+          canvas.style.maxWidth = 'none'; // ป้องกันไม่ให้โดนบีบ
+
+          // เลื่อนตำแหน่ง canvas ไปซ้ายหรือขวาตามที่เราต้องการจะโชว์ (ครึ่งซ้าย หรือ ครึ่งขวา)
+          if (isRightHalf) {
+            canvas.style.transform = 'translateX(-50%)';
+          } else {
+            canvas.style.transform = 'translateX(0)';
+          }
 
           const renderContext = {
             canvasContext: ctx,
@@ -79,7 +89,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
   const [filterMode, setFilterMode] = useState<string>('normal');
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<any>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0, isPortrait: false });
   
   // ซ่อน Toolbar ไว้เป็นค่าเริ่มต้น เพื่อให้อารมณ์เหมือนอ่านหนังสือ
   const [showToolbar, setShowToolbar] = useState(false);
@@ -89,16 +99,20 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
       // คราวนี้ใช้ความสูงเต็มจอเลย (ไม่ต้องหัก 64px ของ Toolbar แล้ว เพราะ Toolbar ลอยทับ)
       // หักแค่ padding บนล่างนิดหน่อย (40px)
       const availableHeight = window.innerHeight - 40;
+      const availableWidth = window.innerWidth - 40;
+      const portraitMode = window.innerWidth < window.innerHeight;
+      
       let h = availableHeight;
       let w = h * (400 / 566);
       
-      const availableWidth = window.innerWidth - 40;
-      if (w * 2 > availableWidth) {
-         w = availableWidth / 2;
+      const requiredWidth = portraitMode ? w : w * 2;
+      
+      if (requiredWidth > availableWidth) {
+         w = portraitMode ? availableWidth : availableWidth / 2;
          h = w * (566 / 400);
       }
       
-      setDimensions({ width: w, height: h });
+      setDimensions({ width: w, height: h, isPortrait: portraitMode });
     };
 
     updateDimensions();
@@ -203,7 +217,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
              style={{ transform: `scale(${scale})` }}>
           
           {dimensions.width > 0 && (
-            <div style={{ width: dimensions.width * 2, height: dimensions.height }} className="relative z-40">
+            <div style={{ width: dimensions.width * (dimensions.isPortrait ? 1 : 2), height: dimensions.height }} className="relative z-40">
               {/* @ts-ignore */}
               <HTMLFlipBook 
                 width={400} 
@@ -216,24 +230,25 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
                 showCover={true}
                 mobileScrollSupport={true}
                 showPageCorners={false} 
-                usePortrait={false} 
+                usePortrait={true} 
                 flippingTime={450} 
                 maxShadowOpacity={0.3} 
                 swipeDistance={10}
                 className="demo-book shadow-2xl"
               >
-                {Array.from(new Array(numPages % 2 === 0 ? numPages : numPages + 1), (el, index) => (
-                  index < numPages ? (
+                {Array.from(new Array(numPages * 2), (el, index) => {
+                  const pdfPageNum = Math.floor(index / 2) + 1;
+                  const isRight = index % 2 !== 0;
+                  return (
                     <Page
                       key={`page_${index + 1}`}
-                      pageNumber={index + 1}
+                      pageNumber={pdfPageNum}
                       pdfDocument={pdfDocument}
                       filterClass={getFilterClass()}
+                      isRightHalf={isRight}
                     />
-                  ) : (
-                    <div key={`page_empty_${index + 1}`} className={`bg-white ${getFilterClass()}`}></div>
-                  )
-                ))}
+                  );
+                })}
               </HTMLFlipBook>
             </div>
           )}
