@@ -3,6 +3,7 @@ export interface Book {
   title: string;
   pdfUrl: string;
   coverColor: string;
+  coverImageUrl?: string;
   categoryId: string;
 }
 

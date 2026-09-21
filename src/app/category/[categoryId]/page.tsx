@@ -64,11 +64,15 @@ export default function CategoryPage() {
               key={book.id}
               className="group flex flex-col items-center bg-white rounded-lg p-3 shadow hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
             >
-              {/* หน้าปกจำลอง */}
-              <div className={`w-full aspect-[1/1.4] ${book.coverColor} rounded-md shadow-inner flex items-center justify-center mb-4 relative overflow-hidden`}>
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
-                <BookOpen size={48} className="text-white/50" />
-                <div className="absolute bottom-2 right-2 bg-black/40 text-white text-xs px-2 py-1 rounded">
+              {/* หน้าปกจำลอง หรือ หน้าปกจริง */}
+              <div className={`w-full aspect-[1/1.4] ${book.coverImageUrl ? 'bg-gray-100' : book.coverColor} rounded-md shadow-inner flex items-center justify-center mb-4 relative overflow-hidden`}>
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity z-10"></div>
+                {book.coverImageUrl ? (
+                  <img src={book.coverImageUrl} alt={book.title} className="w-full h-full object-cover" />
+                ) : (
+                  <BookOpen size={48} className="text-white/50" />
+                )}
+                <div className="absolute bottom-2 right-2 bg-black/40 text-white text-xs px-2 py-1 rounded z-20">
                   PDF
                 </div>
               </div>
