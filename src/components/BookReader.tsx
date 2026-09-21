@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 import HTMLFlipBook from 'react-pageflip';
-import { ZoomIn, ZoomOut, Sun, Moon, Eye, ArrowLeft } from 'lucide-react';
+import { ZoomIn, ZoomOut, Sun, Moon, Eye, ArrowLeft, Wand2 } from 'lucide-react';
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
 
@@ -127,6 +127,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
 
   const getFilterClass = () => {
     switch (filterMode) {
+      case 'enhance': return 'contrast-150 saturate-0 brightness-105';
       case 'dark': return 'invert hue-rotate-180 brightness-90 contrast-125';
       case 'sepia': return 'sepia-[.7] brightness-95 contrast-90';
       default: return '';
@@ -172,6 +173,9 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
 
         <div className="w-px h-6 bg-gray-600 mx-1 md:mx-2"></div>
 
+        <button onClick={() => setFilterMode('enhance')} className={`p-2 rounded-full transition ${filterMode === 'enhance' ? 'bg-purple-600' : 'hover:bg-gray-700'}`} title="โหมดเพิ่มความชัด (สำหรับไฟล์เบลอ)">
+          <Wand2 size={20} />
+        </button>
         <button onClick={() => setFilterMode('normal')} className={`p-2 rounded-full transition ${filterMode === 'normal' ? 'bg-blue-600' : 'hover:bg-gray-700'}`} title="โหมดปกติ">
           <Sun size={20} />
         </button>
