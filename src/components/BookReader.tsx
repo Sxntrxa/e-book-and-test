@@ -212,7 +212,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
                 maxWidth={3000}
                 minHeight={100}
                 maxHeight={3000}
-                showCover={false}
+                showCover={true}
                 mobileScrollSupport={true}
                 showPageCorners={false} 
                 usePortrait={true} 
