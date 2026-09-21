@@ -89,30 +89,39 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
   const [filterMode, setFilterMode] = useState<string>('normal');
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<any>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0, isPortrait: false });
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0, isPortrait: false, bookWidth: 400, bookHeight: 566 });
   
   // ซ่อน Toolbar ไว้เป็นค่าเริ่มต้น เพื่อให้อารมณ์เหมือนอ่านหนังสือ
   const [showToolbar, setShowToolbar] = useState(false);
 
   useEffect(() => {
     const updateDimensions = () => {
-      // คราวนี้ใช้ความสูงเต็มจอเลย (ไม่ต้องหัก 64px ของ Toolbar แล้ว เพราะ Toolbar ลอยทับ)
-      // หักแค่ padding บนล่างนิดหน่อย (40px)
       const availableHeight = window.innerHeight - 40;
-      const availableWidth = window.innerWidth - 40;
+      const availableWidth = window.innerWidth;
       const portraitMode = window.innerWidth < window.innerHeight;
       
+      let w = availableWidth;
       let h = availableHeight;
-      let w = h * (400 / 566);
       
-      const requiredWidth = portraitMode ? w : w * 2;
+      let bookW, bookH;
       
-      if (requiredWidth > availableWidth) {
-         w = portraitMode ? availableWidth : availableWidth / 2;
-         h = w * (566 / 400);
+      if (portraitMode) {
+        // ในแนวตั้ง ให้ 1 หน้าของหนังสือ กว้างเต็มจอ และสูงเต็มจอ
+        bookW = availableWidth;
+        bookH = availableHeight;
+      } else {
+        // ในแนวนอน ให้ 2 หน้าของหนังสือ กว้างเต็มจอ (ดังนั้น 1 หน้ากว้างครึ่งจอ)
+        bookW = availableWidth / 2;
+        bookH = availableHeight;
       }
       
-      setDimensions({ width: w, height: h, isPortrait: portraitMode });
+      setDimensions({ 
+        width: portraitMode ? bookW : bookW * 2, 
+        height: bookH, 
+        isPortrait: portraitMode,
+        bookWidth: bookW,
+        bookHeight: bookH
+      });
     };
 
     updateDimensions();
@@ -217,11 +226,11 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
              style={{ transform: `scale(${scale})` }}>
           
           {dimensions.width > 0 && (
-            <div style={{ width: dimensions.width * (dimensions.isPortrait ? 1 : 2), height: dimensions.height }} className="relative z-40">
+            <div style={{ width: dimensions.width, height: dimensions.height }} className="relative z-40">
               {/* @ts-ignore */}
               <HTMLFlipBook 
-                width={400} 
-                height={566} 
+                width={dimensions.bookWidth} 
+                height={dimensions.bookHeight} 
                 size="stretch"
                 minWidth={100}
                 maxWidth={3000}
