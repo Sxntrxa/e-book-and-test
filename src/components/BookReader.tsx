@@ -79,26 +79,29 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
   const [filterMode, setFilterMode] = useState<string>('normal');
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<any>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0, isPortrait: false });
   
-  // ซ่อน Toolbar ไว้เป็นค่าเริ่มต้น เพื่อให้อารมณ์เหมือนอ่านหนังสือ
+  // ซ่อนแถบ Toolbar เมื่อผู้ใช้อ่านหนังสือ และให้แตะกลางจอเพื่อเรียกขึ้นมาได้
   const [showToolbar, setShowToolbar] = useState(false);
 
   useEffect(() => {
     const updateDimensions = () => {
-      // คราวนี้ใช้ความสูงเต็มจอเลย (ไม่ต้องหัก 64px ของ Toolbar แล้ว เพราะ Toolbar ลอยทับ)
-      // หักแค่ padding บนล่างนิดหน่อย (40px)
+      // ใช้ความสูงของหน้าต่างลบด้วย padding นิดหน่อย (ไม่หักความสูง Toolbar แล้ว เพราะซ่อน)
       const availableHeight = window.innerHeight - 40;
+      const availableWidth = window.innerWidth - 40;
+      const portraitMode = window.innerWidth < window.innerHeight;
+      
       let h = availableHeight;
       let w = h * (400 / 566);
       
-      const availableWidth = window.innerWidth - 40;
-      if (w * 2 > availableWidth) {
-         w = availableWidth / 2;
+      const requiredWidth = portraitMode ? w : w * 2;
+      
+      if (requiredWidth > availableWidth) {
+         w = portraitMode ? availableWidth : availableWidth / 2;
          h = w * (566 / 400);
       }
       
-      setDimensions({ width: w, height: h });
+      setDimensions({ width: w, height: h, isPortrait: portraitMode });
     };
 
     updateDimensions();
@@ -203,7 +206,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
              style={{ transform: `scale(${scale})` }}>
           
           {dimensions.width > 0 && (
-            <div style={{ width: dimensions.width * 2, height: dimensions.height }} className="relative z-40">
+            <div style={{ width: dimensions.width * (dimensions.isPortrait ? 1 : 2), height: dimensions.height }} className="relative z-40">
               {/* @ts-ignore */}
               <HTMLFlipBook 
                 width={400} 
@@ -216,7 +219,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
                 showCover={true}
                 mobileScrollSupport={true}
                 showPageCorners={false} 
-                usePortrait={false} 
+                usePortrait={true} 
                 flippingTime={450} 
                 maxShadowOpacity={0.3} 
                 swipeDistance={10}
