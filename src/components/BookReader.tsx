@@ -11,11 +11,10 @@ interface PageProps {
   pageNumber: number;
   pdfDocument: any;
   filterClass: string;
-  isRightHalf?: boolean;
 }
 
 const Page = React.forwardRef<HTMLDivElement, PageProps>(
-  ({ pageNumber, pdfDocument, filterClass, isRightHalf = false }, ref) => {
+  ({ pageNumber, pdfDocument, filterClass }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -36,18 +35,10 @@ const Page = React.forwardRef<HTMLDivElement, PageProps>(
           canvas.width = viewport.width;
           canvas.height = viewport.height;
           
-          // ขยายความกว้าง canvas เป็น 2 เท่า (200%) เพื่อให้หน้าคู่แนวนอนเต็มพื้นที่
-          canvas.style.width = '200%';
+          canvas.style.width = '100%';
           canvas.style.height = '100%';
           canvas.style.display = 'block';
-          canvas.style.maxWidth = 'none'; // ป้องกันไม่ให้โดนบีบ
-
-          // เลื่อนตำแหน่ง canvas ไปซ้ายหรือขวาตามที่เราต้องการจะโชว์ (ครึ่งซ้าย หรือ ครึ่งขวา)
-          if (isRightHalf) {
-            canvas.style.transform = 'translateX(-50%)';
-          } else {
-            canvas.style.transform = 'translateX(0)';
-          }
+          canvas.style.objectFit = 'contain';
 
           const renderContext = {
             canvasContext: ctx,
@@ -89,7 +80,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
   const [filterMode, setFilterMode] = useState<string>('normal');
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<any>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0, isPortrait: false, bookWidth: 400, bookHeight: 566 });
+  const [dimensions, setDimensions] = useState({ wrapperWidth: 0, wrapperHeight: 0, pageWidth: 0, pageHeight: 0, isPortrait: false });
   
   // ซ่อน Toolbar ไว้เป็นค่าเริ่มต้น เพื่อให้อารมณ์เหมือนอ่านหนังสือ
   const [showToolbar, setShowToolbar] = useState(false);
@@ -100,27 +91,12 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
       const availableWidth = window.innerWidth;
       const portraitMode = window.innerWidth < window.innerHeight;
       
-      let w = availableWidth;
-      let h = availableHeight;
-      
-      let bookW, bookH;
-      
-      if (portraitMode) {
-        // ในแนวตั้ง ให้ 1 หน้าของหนังสือ กว้างเต็มจอ และสูงเต็มจอ
-        bookW = availableWidth;
-        bookH = availableHeight;
-      } else {
-        // ในแนวนอน ให้ 2 หน้าของหนังสือ กว้างเต็มจอ (ดังนั้น 1 หน้ากว้างครึ่งจอ)
-        bookW = availableWidth / 2;
-        bookH = availableHeight;
-      }
-      
       setDimensions({ 
-        width: portraitMode ? bookW : bookW * 2, 
-        height: bookH, 
-        isPortrait: portraitMode,
-        bookWidth: bookW,
-        bookHeight: bookH
+        wrapperWidth: availableWidth, 
+        wrapperHeight: availableHeight,
+        pageWidth: portraitMode ? availableWidth : availableWidth / 2,
+        pageHeight: availableHeight,
+        isPortrait: portraitMode
       });
     };
 
@@ -225,12 +201,12 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
         <div className="transition-transform duration-300 ease-out origin-top flex justify-center"
              style={{ transform: `scale(${scale})` }}>
           
-          {dimensions.width > 0 && (
-            <div style={{ width: dimensions.width, height: dimensions.height }} className="relative z-40">
+          {dimensions.wrapperWidth > 0 && (
+            <div style={{ width: dimensions.wrapperWidth, height: dimensions.wrapperHeight }} className="relative z-40 bg-gray-900 flex justify-center items-center">
               {/* @ts-ignore */}
               <HTMLFlipBook 
-                width={dimensions.bookWidth} 
-                height={dimensions.bookHeight} 
+                width={dimensions.pageWidth} 
+                height={dimensions.pageHeight} 
                 size="stretch"
                 minWidth={100}
                 maxWidth={3000}
@@ -245,19 +221,18 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
                 swipeDistance={10}
                 className="demo-book shadow-2xl"
               >
-                {Array.from(new Array(numPages * 2), (el, index) => {
-                  const pdfPageNum = Math.floor(index / 2) + 1;
-                  const isRight = index % 2 !== 0;
-                  return (
+                {Array.from(new Array(numPages % 2 === 0 ? numPages : numPages + 1), (el, index) => (
+                  index < numPages ? (
                     <Page
                       key={`page_${index + 1}`}
-                      pageNumber={pdfPageNum}
+                      pageNumber={index + 1}
                       pdfDocument={pdfDocument}
                       filterClass={getFilterClass()}
-                      isRightHalf={isRight}
                     />
-                  );
-                })}
+                  ) : (
+                    <div key={`page_empty_${index + 1}`} className={`bg-white ${getFilterClass()}`}></div>
+                  )
+                ))}
               </HTMLFlipBook>
             </div>
           )}
