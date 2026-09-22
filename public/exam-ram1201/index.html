@@ -879,6 +879,7 @@
         const isLast = currentQuestionIndex === currentQuestions.length - 1;
         document.getElementById('next-btn').style.display = isLast ? 'none' : 'inline-flex';
         document.getElementById('submit-btn').style.display = isLast ? 'inline-flex' : 'none';
+        if (typeof renderNavGrid === 'function') renderNavGrid();
     }
 
     function nextQuestion() { if (currentQuestionIndex < currentQuestions.length - 1) { currentQuestionIndex++; renderQuestion(); } }
