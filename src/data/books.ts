@@ -134,6 +134,7 @@ export const categories: Category[] = [
   {
     "id": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม",
     "title": "RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม",
+    "quizUrl": "/exam-ram1201/index.html",
     "books": [
       {
         "id": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch1",
