@@ -434,6 +434,55 @@
         }
 
         .text-center { text-align: center; }
+    
+        /* ─── Question Navigator ─── */
+        .nav-grid-container {
+            margin-top: 16px;
+            padding: 16px 20px;
+            background: var(--surface-solid);
+            border-top: 1px solid var(--separator);
+        }
+        .nav-grid-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 8px;
+        }
+        .nav-box {
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background: var(--fill);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+        .nav-box:hover {
+            opacity: 0.8;
+        }
+        .nav-box.answered {
+            background: rgba(52,199,89,0.15);
+            color: var(--success);
+            border-color: rgba(52,199,89,0.3);
+        }
+        .nav-box.current {
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 0 2px rgba(0,122,255,0.2);
+        }
+
     </style>
 </head>
 <body>
@@ -508,6 +557,14 @@
                 <button class="ios-btn ios-btn-success" id="submit-btn" onclick="submitQuiz()" style="display: none;">ส่งคำตอบ</button>
             </div>
         </div>
+
+            <div class="nav-grid-container">
+                <div class="nav-grid-title">
+                    <span>แผงควบคุมข้อสอบ</span>
+                    <span style="font-size: 12px; font-weight: normal;">(เขียว = ตอบแล้ว)</span>
+                </div>
+                <div class="nav-grid" id="question-nav-grid"></div>
+            </div>
     </div>
 
     <!-- ═══ Screen: Results ═══ -->
@@ -763,6 +820,24 @@
         renderQuestion();
     }
     
+    
+    function renderNavGrid() {
+        const grid = document.getElementById('question-nav-grid');
+        grid.innerHTML = '';
+        currentQuestions.forEach((_, i) => {
+            const box = document.createElement('div');
+            box.className = 'nav-box';
+            if (userAnswers[i] !== null) box.classList.add('answered');
+            if (i === currentQuestionIndex) box.classList.add('current');
+            box.innerText = i + 1;
+            box.onclick = () => {
+                currentQuestionIndex = i;
+                renderQuestion();
+            };
+            grid.appendChild(box);
+        });
+    }
+
     function updateTimerDisplay() {
         const timerEl = document.getElementById('quiz-timer-display');
         const m = Math.floor(quizTimeRemaining / 60).toString().padStart(2, '0');
