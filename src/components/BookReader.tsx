@@ -76,6 +76,7 @@ Page.displayName = 'Page';
 export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?: () => void }) {
   const [pdfDocument, setPdfDocument] = useState<any>(null);
   const [numPages, setNumPages] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [scale, setScale] = useState<number>(1.0);
   const [filterMode, setFilterMode] = useState<string>('normal');
   const [loading, setLoading] = useState(true);
@@ -220,6 +221,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
                 maxShadowOpacity={0.3} 
                 swipeDistance={10}
                 className="demo-book shadow-2xl"
+                onFlip={(e: any) => setCurrentPage(e.data)}
               >
                 {Array.from(new Array(numPages % 2 === 0 ? numPages : numPages + 1), (el, index) => (
                   index < numPages ? (
@@ -237,6 +239,11 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
             </div>
           )}
         </div>
+      </div>
+      
+      {/* Page Indicator */}
+      <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-1.5 rounded-full text-sm font-medium tracking-wide shadow-lg backdrop-blur-sm z-[60] transition-opacity duration-300 pointer-events-none ${showToolbar ? 'opacity-100' : 'opacity-0'}`}>
+        หน้า {currentPage + 1} {(!dimensions.isPortrait && currentPage !== 0 && currentPage + 1 < numPages) ? `- ${currentPage + 2}` : ''} / {numPages} (เหลืออีก {numPages - (currentPage + (!dimensions.isPortrait && currentPage !== 0 ? 2 : 1))} หน้า)
       </div>
     </div>
   );

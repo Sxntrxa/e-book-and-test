@@ -72,8 +72,15 @@ export default function CategoryPage() {
                 ) : (
                   <BookOpen size={48} className="text-white/50" />
                 )}
-                <div className="absolute bottom-2 right-2 bg-black/40 text-white text-xs px-2 py-1 rounded z-20">
-                  PDF
+                <div className="absolute bottom-2 right-2 flex flex-col gap-1 items-end z-20">
+                  {book.totalPages && (
+                    <div className="bg-black/60 text-white text-[10px] px-2 py-0.5 rounded shadow-sm flex items-center gap-1 backdrop-blur-sm">
+                      <BookOpen size={10} /> {book.totalPages} หน้า
+                    </div>
+                  )}
+                  <div className="bg-blue-600/80 text-white text-xs px-2 py-0.5 rounded shadow-sm backdrop-blur-sm font-semibold">
+                    PDF
+                  </div>
                 </div>
               </div>
               
