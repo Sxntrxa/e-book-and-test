@@ -17,7 +17,7 @@ export const categories: Category[] = [
   {
     "id": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม",
     "title": "RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม",
-    "quizUrl": null,
+    "quizUrl": undefined,
     "books": [
       {
         "id": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch1",
@@ -136,7 +136,7 @@ export const categories: Category[] = [
   {
     "id": "Ram1203",
     "title": "RAM1203 ชื่อวิชา",
-    "quizUrl": null,
+    "quizUrl": undefined,
     "books": [
       {
         "id": "Ram1203-ch1",
@@ -279,7 +279,7 @@ export const categories: Category[] = [
   {
     "id": "covers",
     "title": "covers",
-    "quizUrl": null,
+    "quizUrl": undefined,
     "books": []
   },
   {
