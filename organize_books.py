@@ -75,7 +75,7 @@ export interface Category {{
   books: Book[];
 }}
 
-export const categories: Category[] = {json.dumps(categories, ensure_ascii=False, indent=2)};
+export const categories: Category[] = {json.dumps(categories, ensure_ascii=False, indent=2).replace('"quizUrl": null', '"quizUrl": undefined')};
 
 export function getBookById(id: string): Book | undefined {{
   for (const cat of categories) {{
