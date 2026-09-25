@@ -17,7 +17,7 @@ export const categories: Category[] = [
   {
     "id": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม",
     "title": "RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม",
-    "quizUrl": undefined,
+    "quizUrl": "/exam-ram1201/index.html",
     "books": [
       {
         "id": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch1",
@@ -135,7 +135,7 @@ export const categories: Category[] = [
   },
   {
     "id": "Ram1203",
-    "title": "RAM1203 ชื่อวิชา",
+    "title": "RAM1203 ศาสตร์การคิดเปลี่ยนโลก",
     "quizUrl": undefined,
     "books": [
       {
@@ -275,12 +275,6 @@ export const categories: Category[] = [
         "categoryId": "Ram1203"
       }
     ]
-  },
-  {
-    "id": "covers",
-    "title": "covers",
-    "quizUrl": undefined,
-    "books": []
   },
   {
     "id": "psychology-intro",

@@ -21,17 +21,18 @@ def natural_sort_key(s):
 category_titles = {
     'psychology-intro': 'PSY1002 จิตวิทยาเบื้องต้น',
     'RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม': 'RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม',
-    'Ram1203': 'RAM1203 ชื่อวิชา'
+    'Ram1203': 'RAM1203 ศาสตร์การคิดเปลี่ยนโลก'
 }
 
 category_quiz_urls = {
-    'psychology-intro': '/exam-psychology/index.html'
+    'psychology-intro': '/exam-psychology/index.html',
+    'RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม': '/exam-ram1201/index.html'
 }
 
 categories = []
 for dir_name in os.listdir(public_dir):
     dir_path = os.path.join(public_dir, dir_name)
-    if os.path.isdir(dir_path) and not dir_name.startswith('exam-'):
+    if os.path.isdir(dir_path) and not dir_name.startswith('exam-') and dir_name != 'covers':
         pdf_files = [f for f in os.listdir(dir_path) if f.lower().endswith('.pdf') and 'เอกสารประกอบการสอน' not in f]
         pdf_files.sort(key=natural_sort_key)
         
@@ -56,8 +57,6 @@ for dir_name in os.listdir(public_dir):
             'books': books
         })
 
-# Sort categories by id if needed, but we'll just keep the order
-# Actually let's not sort to preserve whatever order it had, or sort by id:
 categories.sort(key=lambda x: x['id'])
 
 ts_content = f"""export interface Book {{
