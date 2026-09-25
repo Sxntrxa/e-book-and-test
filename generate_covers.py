@@ -13,7 +13,7 @@ with open(books_ts_path, 'r', encoding='utf-8') as f:
     content = f.read()
 
 # Find all blocks that look like a book object
-book_pattern = re.compile(r'\{\s*"id":\s*"([^"]+)",\s*"title":\s*"[^"]+",\s*"pdfUrl":\s*"([^"]+)",\s*"coverColor":\s*"[^"]+",?(?:\s*"coverImageUrl":\s*"[^"]+",?)?\s*"categoryId":\s*"[^"]+"\s*\}')
+book_pattern = re.compile(r'\{\s*"id":\s*"([^"]+)",\s*"title":\s*"[^"]+",\s*"pdfUrl":\s*"([^"]+)",\s*"coverColor":\s*"[^"]+",?(?:\s*"coverImageUrl":\s*"[^"]+",?)?(?:\s*"totalPages":\s*\d+,?)?\s*"categoryId":\s*"[^"]+"\s*\}')
 
 def replacer(match):
     book_id = match.group(1)

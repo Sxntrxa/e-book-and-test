@@ -25,6 +25,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม.pdf",
         "coverColor": "bg-blue-600",
         "totalPages": 267,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch1.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -33,6 +34,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 1 ทฤษฎีการผลิต.pdf",
         "coverColor": "bg-green-600",
         "totalPages": 32,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch2.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -41,6 +43,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 2 แนวทางการส่งเสริมากพัฒนานวัตกรรม.pdf",
         "coverColor": "bg-purple-600",
         "totalPages": 24,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch3.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -49,6 +52,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 3 ความรู้เบื้องค้นเกี่ยวกับความคิดสร้างสรรค์และนวัตกรรม.pdf",
         "coverColor": "bg-red-600",
         "totalPages": 29,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch4.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -57,6 +61,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 4 ประเภทของนวัตกรรม.pdf",
         "coverColor": "bg-orange-600",
         "totalPages": 14,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch5.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -65,6 +70,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 5 การเปลี่ยนแปลงทางเทคโนโลยี.pdf",
         "coverColor": "bg-teal-600",
         "totalPages": 16,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch6.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -73,6 +79,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 6 แหล่งที่มาของนวัตกรรม.pdf",
         "coverColor": "bg-indigo-600",
         "totalPages": 25,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch7.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -81,6 +88,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 7 นวัตกรรมและการเป็นผู้ประกอบการ.pdf",
         "coverColor": "bg-blue-600",
         "totalPages": 26,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch8.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -89,6 +97,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 8 กระบวนการพัฒนาผลิตภัณฑ์นวัตกรรม.pdf",
         "coverColor": "bg-green-600",
         "totalPages": 9,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch9.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -97,6 +106,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 9 วิวัฒนาการของเทคโนโลยี.pdf",
         "coverColor": "bg-purple-600",
         "totalPages": 13,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch10.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -105,6 +115,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 10 เทคโนโลยีดิจิทัล.pdf",
         "coverColor": "bg-red-600",
         "totalPages": 9,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch11.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -113,6 +124,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 11 อุตสาหกรรมอัจฉริยะ.pdf",
         "coverColor": "bg-orange-600",
         "totalPages": 8,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch12.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -121,6 +133,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 12 นวัตกรรมสีเขียว และ นวัตกรรมที่ยั่งยืน.pdf",
         "coverColor": "bg-teal-600",
         "totalPages": 27,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch13.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       },
       {
@@ -129,6 +142,7 @@ export const categories: Category[] = [
         "pdfUrl": "/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม/บทที่ 13 ความรู้เกี่ยวกับทรัพย์สินทางปัญญา.pdf",
         "coverColor": "bg-indigo-600",
         "totalPages": 32,
+        "coverImageUrl": "/covers/RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม-ch14.jpg",
         "categoryId": "RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม"
       }
     ]
@@ -287,6 +301,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 1 ความรู้เบื้องต้นเกี่ยวกับจิตวิทยา.pdf",
         "coverColor": "bg-blue-600",
         "totalPages": 32,
+        "coverImageUrl": "/covers/psychology-intro-ch1.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -295,6 +310,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 2 ร่างกายและจิตใจ.pdf",
         "coverColor": "bg-green-600",
         "totalPages": 39,
+        "coverImageUrl": "/covers/psychology-intro-ch2.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -303,6 +319,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 3 พัฒนาการมนุษย์.pdf",
         "coverColor": "bg-purple-600",
         "totalPages": 33,
+        "coverImageUrl": "/covers/psychology-intro-ch3.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -311,6 +328,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 4 การรับสัมผัสและการรับรู้.pdf",
         "coverColor": "bg-red-600",
         "totalPages": 47,
+        "coverImageUrl": "/covers/psychology-intro-ch4.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -319,6 +337,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 5 การเรียนรู้.pdf",
         "coverColor": "bg-orange-600",
         "totalPages": 40,
+        "coverImageUrl": "/covers/psychology-intro-ch5.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -327,6 +346,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 6 การรู้คิดและสติปัญญา.pdf",
         "coverColor": "bg-teal-600",
         "totalPages": 34,
+        "coverImageUrl": "/covers/psychology-intro-ch6.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -335,6 +355,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 7 แรงจูงใจและอารมณ์.pdf",
         "coverColor": "bg-indigo-600",
         "totalPages": 61,
+        "coverImageUrl": "/covers/psychology-intro-ch7.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -343,6 +364,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 8 บุคลิกภาพและการวัด.pdf",
         "coverColor": "bg-blue-600",
         "totalPages": 35,
+        "coverImageUrl": "/covers/psychology-intro-ch8.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -351,6 +373,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 9 ความเครียดและสุขภาพ.pdf",
         "coverColor": "bg-green-600",
         "totalPages": 21,
+        "coverImageUrl": "/covers/psychology-intro-ch9.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -359,6 +382,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 10 ความผิดปกติทางจิตและการบำบัด.pdf",
         "coverColor": "bg-purple-600",
         "totalPages": 28,
+        "coverImageUrl": "/covers/psychology-intro-ch10.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -367,6 +391,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 11 พฤติกรรมทางสังคม.pdf",
         "coverColor": "bg-red-600",
         "totalPages": 36,
+        "coverImageUrl": "/covers/psychology-intro-ch11.jpg",
         "categoryId": "psychology-intro"
       },
       {
@@ -375,6 +400,7 @@ export const categories: Category[] = [
         "pdfUrl": "/psychology-intro/บทที่ 12 จิตวิทยาประยุกต์.pdf",
         "coverColor": "bg-orange-600",
         "totalPages": 20,
+        "coverImageUrl": "/covers/psychology-intro-ch12.jpg",
         "categoryId": "psychology-intro"
       }
     ]
