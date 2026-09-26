@@ -647,19 +647,35 @@
     }
 
     // ─── Init ───
-    window.onload = function() {
+    window.onload = async function() {
         const container = document.getElementById('chapter-buttons');
+        container.innerHTML = '<div style="color:var(--text-secondary); text-align:center; padding: 20px;">กำลังโหลดข้อสอบ...</div>';
+        
+        let totalAll = 0;
+        
         for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
-            const varName = 'questions_ch' + i;
-            let data = null;
-            try { data = eval(varName); } catch(e) {}
-            if (typeof data === 'undefined' || data === null) data = null;
-            allQuizzes[i] = data;
-
+            try {
+                const res = await fetch('/exam-ram1203/questions_ch' + i + '.json?v=' + Date.now());
+                if (res.ok) {
+                    const data = await res.json();
+                    allQuizzes[i] = data;
+                    totalAll += data.length;
+                } else {
+                    allQuizzes[i] = null;
+                }
+            } catch (e) {
+                allQuizzes[i] = null;
+            }
+        }
+        
+        container.innerHTML = '';
+        
+        for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
+            const data = allQuizzes[i];
             const btn = document.createElement('button');
             btn.className = 'chapter-btn';
             btn.innerText = chapterNames[i];
-            if (data !== null) {
+            if (data !== null && data.length > 0) {
                 btn.onclick = () => pickCount(i);
             } else {
                 btn.disabled = true;
@@ -669,15 +685,19 @@
             container.appendChild(btn);
         }
         
-        const randBtn = document.createElement('button');
-        randBtn.className = 'chapter-btn';
-        randBtn.style.background = 'var(--accent)';
-        randBtn.style.color = '#fff';
-        randBtn.innerText = 'สุ่มรวมทุกบท';
-        randBtn.onclick = () => pickCount('all');
-        container.appendChild(randBtn);
+        if (totalAll > 0) {
+            const randBtn = document.createElement('button');
+            randBtn.className = 'chapter-btn';
+            randBtn.style.background = 'var(--accent)';
+            randBtn.style.color = '#fff';
+            randBtn.innerText = '🎲 สุ่มรวมทุกบท (' + totalAll + ' ข้อ)';
+            randBtn.onclick = () => pickCount('all');
+            container.appendChild(randBtn);
+        }
+        
+        renderHistory();
     };
-
+    
     // ─── Count Picker ───
     let selectedTimerMinutes = 0;
     let selectedCount = 0;
