@@ -26,7 +26,7 @@ category_titles = {
 
 category_quiz_urls = {
     'psychology-intro': '/exam-psychology/index.html',
-    'RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม': '/exam-ram1201/index.html'
+    'RAM1201 RAM1201 ความคิดสร้างสรรค์เพื่อพัฒนานวัตกรรม': '/exam-ram1201/index.html', 'Ram1203': '/exam-ram1203/index.html'
 }
 
 categories = []

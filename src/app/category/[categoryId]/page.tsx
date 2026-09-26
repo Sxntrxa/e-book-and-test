@@ -14,7 +14,7 @@ export default function CategoryPage() {
 
   if (!category) {
     return (
-      <div className="flex flex-col h-screen w-full items-center justify-center bg-gray-50 text-gray-800">
+      <div className="flex flex-col h-screen w-full items-center justify-center bg-transparent text-[var(--foreground)] relative z-10">
         <h1 className="text-2xl mb-4 text-danger font-bold">ไม่พบหมวดหมู่นี้</h1>
         <Link href="/" className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition">
           กลับหน้าแรก
@@ -24,18 +24,18 @@ export default function CategoryPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 text-gray-900 font-sans">
+    <main className="min-h-screen bg-transparent text-[var(--foreground)] font-sans relative z-10">
       {/* Header */}
-      <header className="bg-blue-900 p-6 shadow-md relative">
+      <header className="glass-panel border-b border-[var(--glass-border)] p-6 relative">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button 
               onClick={() => router.push('/')}
-              className="flex items-center gap-2 hover:text-blue-300 transition mr-4"
+              className="flex items-center gap-2 hover:text-primary drop-shadow-sm transition mr-4"
             >
               <ArrowLeft size={24} />
             </button>
-            <FolderOpen size={32} className="text-blue-300" />
+            <FolderOpen size={32} className="text-primary drop-shadow-md" />
             <h1 className="text-2xl font-bold tracking-wide">หมวดหมู่: {category.title}</h1>
           </div>
           
@@ -52,7 +52,7 @@ export default function CategoryPage() {
 
       {/* Content */}
       <div className="max-w-6xl mx-auto p-6 mt-6">
-        <h2 className="text-xl font-bold mb-6 text-gray-800 border-b-2 border-gray-200 pb-2 flex items-center justify-between">
+        <h2 className="text-xl font-bold mb-6 text-[var(--foreground)] border-b-2 border-[var(--glass-border)] pb-2 flex items-center justify-between drop-shadow-sm">
           <span>เลือกบทเรียนที่ต้องการอ่าน</span>
           <span className="text-sm font-normal text-muted">ทั้งหมด {category.books.length} บท</span>
         </h2>
@@ -62,7 +62,7 @@ export default function CategoryPage() {
             <Link 
               href={`/read/${book.id}`} 
               key={book.id}
-              className="group flex flex-col items-center bg-white rounded-lg p-3 shadow hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              className="group flex flex-col items-center glass-panel rounded-lg p-3 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.03] border border-[var(--glass-border)]"
             >
               {/* หน้าปกจำลอง หรือ หน้าปกจริง */}
               <div className={`w-full aspect-[1/1.4] ${book.coverImageUrl ? 'bg-gray-100' : book.coverColor} rounded-md shadow-inner flex items-center justify-center mb-4 relative overflow-hidden`}>
@@ -85,7 +85,7 @@ export default function CategoryPage() {
               </div>
               
               {/* ชื่อหนังสือ/บทเรียน */}
-              <h3 className="text-sm font-semibold text-center line-clamp-2 text-gray-700 group-hover:text-blue-600 transition-colors">
+              <h3 className="text-sm font-semibold text-center line-clamp-2 text-[var(--foreground)] group-hover:text-blue-600 transition-colors">
                 {book.title}
               </h3>
             </Link>
