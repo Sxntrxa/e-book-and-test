@@ -18,7 +18,7 @@ const Page = React.forwardRef<HTMLDivElement, PageProps>(
   ({ pageNumber, pdfDocument, filterClass, currentPage }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    const [isRendered, setIsRendered] = useState(false);
+    const hasRendered = useRef(false);
     // pageNumber is 1-indexed, currentPage is 0-indexed
     // We render pages that are within 3 pages of the current page to keep it smooth but save memory
     const isVisible = Math.abs((pageNumber - 1) - currentPage) <= 3;
@@ -27,8 +27,8 @@ const Page = React.forwardRef<HTMLDivElement, PageProps>(
       let renderTask: any;
       
       const renderPage = async () => {
-        if (!pdfDocument || !canvasRef.current || isRendered || !isVisible) return;
-        setIsRendered(true);
+        if (!pdfDocument || !canvasRef.current || hasRendered.current || !isVisible) return;
+        hasRendered.current = true;
 
         try {
           const page = await pdfDocument.getPage(pageNumber);
@@ -69,7 +69,7 @@ const Page = React.forwardRef<HTMLDivElement, PageProps>(
           renderTask.cancel();
         }
       };
-    }, [pageNumber, pdfDocument, isVisible, isRendered]);
+    }, [pageNumber, pdfDocument, isVisible]);
 
     return (
       <div ref={ref} className={`bg-white overflow-hidden ${filterClass}`}>
