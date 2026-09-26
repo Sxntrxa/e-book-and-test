@@ -40,12 +40,12 @@ export default function CategoryPage() {
           </div>
           
           {category.quizUrl && (
-            <a 
-              href={category.quizUrl}
+            <Link 
+              href={`/exam/${category.id}`}
               className="bg-green-600 hover:bg-green-500 px-5 py-2 rounded-full font-bold shadow-md transition-all transform hover:scale-105 flex items-center gap-2"
             >
               ทำแบบทดสอบ
-            </a>
+            </Link>
           )}
         </div>
       </header>

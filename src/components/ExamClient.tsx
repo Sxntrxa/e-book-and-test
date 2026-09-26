@@ -67,7 +67,11 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     } catch (e) {}
 
     const fetchQuizzes = async () => {
-      const folderName = `exam-${courseId.toLowerCase()}`;
+      let folderName = `exam-${courseId.toLowerCase()}`;
+      if (category.quizUrl) {
+         const match = category.quizUrl.match(/^\/([^\/]+)\//);
+         if (match) folderName = match[1];
+      }
       const results = await Promise.all(
         category.books.map(async (book) => {
           const chMatch = book.id.match(/-ch(\d+)$/);
