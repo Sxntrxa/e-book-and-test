@@ -833,7 +833,7 @@
     function renderNavGrid() {
         const grid = document.getElementById('question-nav-grid');
         grid.innerHTML = '';
-        if (loadErrors.length > 0) { console.error('Load errors:', loadErrors); }
+        
         currentQuestions.forEach((_, i) => {
             const box = document.createElement('div');
             box.className = 'nav-box';
