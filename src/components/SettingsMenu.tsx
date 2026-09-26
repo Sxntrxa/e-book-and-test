@@ -2,24 +2,24 @@
 
 import React, { useState } from 'react';
 import { useSettings } from './SettingsProvider';
-import { Settings, Moon, Sun, Type, BookOpenText } from 'lucide-react';
+import { Settings, Moon, Sun, Type, BookOpenText, X } from 'lucide-react';
 
 export default function SettingsMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const [showManual, setShowManual] = useState(false);
   const { theme, setTheme, fontSize, setFontSize } = useSettings();
 
   return (
+    <>
     <div className="fixed top-4 right-4 z-[100] flex items-center gap-2">
-      <a
-        href="/SOP For E-Book & Exam.pdf"
-        target="_blank"
-        rel="noopener noreferrer"
+      <button
+        onClick={() => setShowManual(true)}
         className="h-10 px-3 rounded-full glass-panel flex items-center justify-center gap-1.5 hover:bg-white/10 transition-colors shadow-lg text-sm font-medium"
         title="คู่มือการใช้งาน"
       >
         <BookOpenText size={18} />
         <span className="hidden sm:inline">คู่มือ</span>
-      </a>
+      </button>
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-white/10 transition-colors shadow-lg"
@@ -82,5 +82,32 @@ export default function SettingsMenu() {
         </>
       )}
     </div>
+
+    {/* Manual PDF Modal */}
+    {showManual && (
+      <div className="fixed inset-0 z-[200] flex flex-col bg-black/80 backdrop-blur-sm">
+        <div className="flex items-center justify-between p-3 glass-panel-heavy border-b border-[var(--glass-border)]">
+          <div className="flex items-center gap-2">
+            <BookOpenText size={20} className="text-primary" />
+            <h2 className="text-lg font-bold">คู่มือการใช้งาน</h2>
+          </div>
+          <button
+            onClick={() => setShowManual(false)}
+            className="w-10 h-10 rounded-full glass-button flex items-center justify-center hover:bg-red-500/20 hover:text-red-400 transition-colors"
+            title="ปิด"
+          >
+            <X size={22} />
+          </button>
+        </div>
+        <div className="flex-1 overflow-hidden">
+          <iframe
+            src="/SOP For E-Book & Exam.pdf"
+            className="w-full h-full border-0"
+            title="คู่มือการใช้งาน"
+          />
+        </div>
+      </div>
+    )}
+    </>
   );
 }
