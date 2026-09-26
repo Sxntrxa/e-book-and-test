@@ -2,14 +2,24 @@
 
 import React, { useState } from 'react';
 import { useSettings } from './SettingsProvider';
-import { Settings, Moon, Sun, Type } from 'lucide-react';
+import { Settings, Moon, Sun, Type, BookOpenText } from 'lucide-react';
 
 export default function SettingsMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { theme, setTheme, fontSize, setFontSize } = useSettings();
 
   return (
-    <div className="fixed top-4 right-4 z-[100]">
+    <div className="fixed top-4 right-4 z-[100] flex items-center gap-2">
+      <a
+        href="/SOP For E-Book & Exam.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="h-10 px-3 rounded-full glass-panel flex items-center justify-center gap-1.5 hover:bg-white/10 transition-colors shadow-lg text-sm font-medium"
+        title="คู่มือการใช้งาน"
+      >
+        <BookOpenText size={18} />
+        <span className="hidden sm:inline">คู่มือ</span>
+      </a>
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="w-10 h-10 rounded-full glass-panel flex items-center justify-center hover:bg-white/10 transition-colors shadow-lg"
