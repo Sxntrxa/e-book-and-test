@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { useSettings } from './SettingsProvider';
-import { Settings, Moon, Sun, Type, BookOpenText, X } from 'lucide-react';
+import { Settings, Moon, Sun, Type, BookOpenText } from 'lucide-react';
+import BookReader from './BookReader';
 
 export default function SettingsMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -83,29 +84,12 @@ export default function SettingsMenu() {
       )}
     </div>
 
-    {/* Manual PDF Modal */}
     {showManual && (
-      <div className="fixed inset-0 z-[200] flex flex-col bg-black/80 backdrop-blur-sm">
-        <div className="flex items-center justify-between p-3 glass-panel-heavy border-b border-[var(--glass-border)]">
-          <div className="flex items-center gap-2">
-            <BookOpenText size={20} className="text-primary" />
-            <h2 className="text-lg font-bold">คู่มือการใช้งาน</h2>
-          </div>
-          <button
-            onClick={() => setShowManual(false)}
-            className="w-10 h-10 rounded-full glass-button flex items-center justify-center hover:bg-red-500/20 hover:text-red-400 transition-colors"
-            title="ปิด"
-          >
-            <X size={22} />
-          </button>
-        </div>
-        <div className="flex-1 overflow-hidden">
-          <iframe
-            src="/SOP For E-Book & Exam.pdf"
-            className="w-full h-full border-0"
-            title="คู่มือการใช้งาน"
-          />
-        </div>
+      <div className="fixed inset-0 z-[200] bg-black">
+        <BookReader 
+          pdfUrl="/SOP For E-Book & Exam.pdf" 
+          onBack={() => setShowManual(false)} 
+        />
       </div>
     )}
     </>

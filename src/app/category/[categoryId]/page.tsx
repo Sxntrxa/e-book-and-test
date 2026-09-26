@@ -28,7 +28,7 @@ export default function CategoryPage() {
     <main className="min-h-screen bg-transparent text-[var(--foreground)] font-sans relative z-10">
       {/* Header */}
       <header className="glass-panel border-b border-[var(--glass-border)] p-6 relative">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+        <div className="max-w-6xl mx-auto flex items-center justify-between pr-24 sm:pr-28">
           <div className="flex items-center gap-3">
             <button 
               onClick={() => router.push('/')}

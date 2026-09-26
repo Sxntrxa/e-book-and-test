@@ -7,8 +7,8 @@ export default function Home() {
     <main className="min-h-screen bg-transparent text-[var(--foreground)] font-sans relative z-10">
       {/* Header */}
       <header className="glass-panel border-b border-[var(--glass-border)] p-6">
-        <div className="max-w-6xl mx-auto flex items-center gap-3">
-          <Library size={32} className="text-primary drop-shadow-md" />
+        <div className="max-w-6xl mx-auto flex items-center gap-3 pr-24 sm:pr-28">
+          <Library size={32} className="text-primary drop-shadow-md shrink-0" />
           <h1 className="text-2xl font-bold tracking-wide">ห้องสมุดดิจิทัล (Digital Library)</h1>
         </div>
       </header>
