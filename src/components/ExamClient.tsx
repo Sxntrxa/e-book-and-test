@@ -135,8 +135,17 @@ export default function ExamClient({ courseId }: ExamClientProps) {
       pool = [...(allQuizzes[selectedChapterIndex as number] || [])];
     }
     
+    // Deduplicate by question text
+    const uniquePoolMap = new Map();
+    pool.forEach(q => {
+        if (!uniquePoolMap.has(q.question)) {
+            uniquePoolMap.set(q.question, q);
+        }
+    });
+    const uniquePool = Array.from(uniquePoolMap.values());
+    
     // Shuffle pool
-    const shuffled = pool.sort(() => 0.5 - Math.random());
+    const shuffled = uniquePool.sort(() => 0.5 - Math.random());
     const finalCount = count === 0 ? pool.length : count;
     const finalQuestions = shuffled.slice(0, finalCount);
     
@@ -266,8 +275,8 @@ export default function ExamClient({ courseId }: ExamClientProps) {
 
   if (examState === 'SELECT_COUNT') {
     const availableRaw = selectedChapterIndex === 'ALL' 
-      ? totalValidQuestions 
-      : (allQuizzes[selectedChapterIndex as number]?.length || 0);
+      ? Array.from(new Map(allQuizzes.filter(q => q !== null).flat().map(item => [item.question, item])).values()).length
+      : Array.from(new Map((allQuizzes[selectedChapterIndex as number] || []).map(item => [item.question, item])).values()).length;
     const available = selectedChapterIndex === 'ALL' ? Math.min(availableRaw, 100) : availableRaw;
       
     const chapterName = selectedChapterIndex === 'ALL' 
@@ -640,17 +649,17 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                       let optClass = "p-3 rounded-xl border text-sm transition-colors ";
                       let icon = null;
                       if (opt === q.answer) {
-                        optClass += "bg-green-500/20 border-green-500 text-green-300 font-medium";
+                        optClass += "bg-green-500/20 border-green-500 text-success font-medium";
                         icon = <CheckCircle size={14} className="shrink-0" />;
                       } else if (opt === uAns) {
-                        optClass += "bg-red-500/20 border-red-500 text-red-300";
+                        optClass += "bg-red-500/20 border-red-500 text-danger";
                         icon = <XCircle size={14} className="shrink-0" />;
                       } else {
                         optClass += "bg-black/20 border-transparent text-muted";
                       }
                       return (
                         <div key={j} className={optClass + " flex items-start gap-2"}>
-                          <span className="font-bold text-muted pt-0.5">{THAI_CHOICES[j] || (j+1)}</span>
+                          <span className="font-bold text-muted pt-0.5 opacity-60">{THAI_CHOICES[j] || (j+1)}</span>
                           <span className="flex-1 leading-snug">{opt}</span>
                           {icon && <div className="mt-0.5">{icon}</div>}
                         </div>
@@ -659,7 +668,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                   </div>
                   
                   {q.explanation && (
-                    <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-300 text-sm">
+                    <div className="mt-4 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-info text-sm">
                       <strong>คำอธิบาย:</strong> {q.explanation}
                     </div>
                   )}
