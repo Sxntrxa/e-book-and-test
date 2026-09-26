@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
 import { SettingsProvider } from "@/components/SettingsProvider";
 import SettingsMenu from "@/components/SettingsMenu";
+import UpdateNotice from "@/components/UpdateNotice";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
           
           <SettingsMenu />
+          <UpdateNotice />
           {children}
         </SettingsProvider>
       </body>
