@@ -29,7 +29,8 @@ interface ExamClientProps {
 const THAI_CHOICES = ['ก.', 'ข.', 'ค.', 'ง.', 'จ.', 'ฉ.'];
 
 export default function ExamClient({ courseId }: ExamClientProps) {
-  const category = categories.find(c => c.id.toLowerCase() === courseId.toLowerCase());
+  const decodedCourseId = decodeURIComponent(courseId);
+  const category = categories.find(c => c.id.toLowerCase() === decodedCourseId.toLowerCase());
   
   const [allQuizzes, setAllQuizzes] = useState<(Question[] | null)[]>([]);
   const [loading, setLoading] = useState(true);
