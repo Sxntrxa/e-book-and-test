@@ -22,8 +22,21 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "E-Book & Test",
-  description: "E-Book and Test System",
+  title: "SINTREA E-Book & Test",
+  description: "ห้องสมุดดิจิทัลและระบบทดสอบออนไลน์ by SINTREA",
+  manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "SINTREA",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
