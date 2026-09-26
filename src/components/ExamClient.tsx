@@ -178,7 +178,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
       questions: currentQuestions
     };
     
-    const updatedHistories = [newHistory, ...examHistories].slice(0, 20); // Keep last 20
+    const updatedHistories = [newHistory, ...examHistories].slice(0, 30); // Keep last 30
     setExamHistories(updatedHistories);
     
     try {
