@@ -675,7 +675,8 @@
         
         container.innerHTML = '';
         
-        for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
+        const displayOrder = [12, 13, 15, 16, 17, 14, 6, 7, 8, 9, 10, 11, 4, 3, 5, 1, 2];
+        for (const i of displayOrder) {
             const data = allQuizzes[i];
             const btn = document.createElement('button');
             btn.className = 'chapter-btn';
