@@ -361,12 +361,12 @@ export default function ExamClient({ courseId }: ExamClientProps) {
           )}
         </div>
 
-        <div className="hidden lg:flex w-[350px] xl:w-[450px] bg-[#1c1f26] border-r border-gray-800 flex-col h-screen sticky top-0 overflow-hidden shrink-0 shadow-2xl z-40">
+        <div className="hidden lg:flex lg:w-1/3 xl:w-[35%] bg-[#1c1f26] border-r border-gray-800 flex-col h-screen sticky top-0 overflow-hidden shrink-0 shadow-2xl z-40">
           <div className="p-5 border-b border-gray-800 font-bold text-lg flex items-center justify-between text-blue-400">
             <div className="flex items-center gap-2"><BookOpen size={20} /> คำตอบของคุณ</div>
             <div className="text-sm text-gray-500 bg-black/20 px-2 py-1 rounded">{userAnswers.filter(a => a !== null).length}/{currentQuestions.length}</div>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 grid grid-cols-2 xl:grid-cols-3 gap-2 content-start custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-6 grid grid-cols-2 gap-4 content-start custom-scrollbar">
             {currentQuestions.map((_, i) => {
               const ansText = userAnswers[i];
               const isCurrent = currentIndex === i;
@@ -485,7 +485,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
               <div className="font-bold text-lg text-blue-400 flex items-center gap-2"><BookOpen size={20} /> คำตอบของคุณ</div>
               <button onClick={() => document.getElementById('mobile-sidebar')?.classList.add('hidden')} className="p-2 bg-gray-800 rounded-lg text-white"><XCircle size={20}/></button>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 grid grid-cols-2 gap-2 content-start">
+            <div className="flex-1 overflow-y-auto p-4 grid grid-cols-2 gap-3 content-start">
               {currentQuestions.map((_, i) => {
                 const ansText = userAnswers[i];
                 const isCurrent = currentIndex === i;
