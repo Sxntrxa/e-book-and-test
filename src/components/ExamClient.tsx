@@ -335,7 +335,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
           
           <button 
             onClick={() => setExamState('SELECT_CHAPTER')}
-            className="mt-6 text-muted hover:text-white text-sm"
+            className="mt-6 text-muted hover:text-[var(--foreground)] text-sm"
           >
             ← กลับไปเลือกบท
           </button>
@@ -409,7 +409,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
           <div className="w-full max-w-5xl mx-auto p-4 md:p-8 flex-1 flex flex-col pb-32">
             
             <div className="hidden lg:flex justify-between items-center mb-8 text-sm text-muted glass-panel p-4 rounded-xl shadow-sm border border-[var(--glass-border)]">
-              <button onClick={() => setExamState('SELECT_CHAPTER')} className="hover:text-white transition flex items-center gap-1">← กลับหน้าเลือกข้อสอบ</button>
+              <button onClick={() => setExamState('SELECT_CHAPTER')} className="hover:text-[var(--foreground)] transition flex items-center gap-1">← กลับหน้าเลือกข้อสอบ</button>
               
               <div className="flex items-center gap-4">
                 {globalTimeRemaining !== null && (
@@ -531,7 +531,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                 <AlertCircle size={40} />
               </div>
               <h3 className="text-2xl font-bold mb-3">ยืนยันการส่งคำตอบ?</h3>
-              <p className="text-muted mb-8 text-lg">คุณทำไปแล้ว <span className="text-white font-bold text-xl">{userAnswers.filter(a => a !== null).length}</span> จาก <span className="text-white font-bold text-xl">{currentQuestions.length}</span> ข้อ</p>
+              <p className="text-muted mb-8 text-lg">คุณทำไปแล้ว <span className="text-[var(--foreground)] font-bold text-xl">{userAnswers.filter(a => a !== null).length}</span> จาก <span className="text-[var(--foreground)] font-bold text-xl">{currentQuestions.length}</span> ข้อ</p>
               <div className="flex flex-col gap-3">
                 <button onClick={() => handleSubmitTest(false)} className="w-full p-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-lg transition shadow-lg shadow-blue-600/20">ส่งคำตอบเลย</button>
                 <button onClick={() => setIsSubmitConfirmOpen(false)} className="w-full p-4 rounded-xl bg-transparent hover:glass-button text-muted font-medium transition">ทบทวนอีกครั้ง</button>
@@ -552,7 +552,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-3xl font-bold flex items-center gap-3"><History className="text-blue-500"/> ประวัติการสอบ</h2>
-              <button onClick={() => setExamState('SELECT_CHAPTER')} className="text-muted hover:text-white flex items-center gap-1 transition">
+              <button onClick={() => setExamState('SELECT_CHAPTER')} className="text-muted hover:text-[var(--foreground)] flex items-center gap-1 transition">
                 <ArrowLeft size={16} /> กลับ
               </button>
             </div>
