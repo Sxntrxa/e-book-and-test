@@ -87,7 +87,7 @@ export default function SettingsMenu() {
     {showManual && (
       <div className="fixed inset-0 z-[200] bg-black">
         <BookReader 
-          pdfUrl="/SOP For E-Book & Exam.pdf" 
+          pdfUrl="/New SOP for  E-Book & Exam.pdf" 
           onBack={() => setShowManual(false)} 
         />
       </div>
