@@ -56,22 +56,15 @@ export default function ExamClient({ courseId }: ExamClientProps) {
 
   // Load Quizzes and History
   useEffect(() => {
-  
-  useEffect(() => {
-    if (globalTimeRemaining === 0 && examState === 'TESTING') {
-      handleSubmitTest(true);
-    }
-  }, [globalTimeRemaining, examState]);
-
-  if (!category) return;
+    if (!category) return;
     
-    // Load History
-    const savedHistory = localStorage.getItem(`examHistory_${courseId}`);
-    if (savedHistory) {
-      try {
+    // Load History safely
+    try {
+      const savedHistory = localStorage.getItem(`examHistory_${courseId}`);
+      if (savedHistory) {
         setExamHistories(JSON.parse(savedHistory));
-      } catch (e) {}
-    }
+      }
+    } catch (e) {}
 
     const fetchQuizzes = async () => {
       const folderName = `exam-${courseId.toLowerCase()}`;
@@ -113,7 +106,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
         if (prev === null) return null;
         if (prev <= 1) {
           clearInterval(timer);
-          return 0;
+          return 0; // Just return 0, let the other useEffect handle submit
         }
         return prev - 1;
       });
@@ -122,7 +115,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     return () => clearInterval(timer);
   }, [examState, currentIndex]);
 
-
+  // Auto-submit when time is up
   useEffect(() => {
     if (globalTimeRemaining === 0 && examState === 'TESTING') {
       handleSubmitTest(true);
@@ -144,8 +137,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     
     // Shuffle pool
     const shuffled = pool.sort(() => 0.5 - Math.random());
-    // Limit to 100 max if count is 0 (ALL)
-    const finalCount = count === 0 ? Math.min(pool.length, 100) : count;
+    const finalCount = count === 0 ? pool.length : count;
     const finalQuestions = shuffled.slice(0, finalCount);
     
     setCurrentQuestions(finalQuestions);
@@ -165,7 +157,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
       ? 'สุ่มรวมทุกบท' 
       : category.books[selectedChapterIndex as number].title;
       
-    const score = userAnswers.reduce((s, ans, i) => s + (ans === currentQuestions[i].answer ? 1 : 0), 0);
+    const score = userAnswers.reduce((s, ans, i) => s + (ans === currentQuestions[i]?.answer ? 1 : 0), 0);
     
     const newHistory: ExamHistory = {
       date: new Date().toISOString(),
@@ -179,7 +171,10 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     
     const updatedHistories = [newHistory, ...examHistories].slice(0, 20); // Keep last 20
     setExamHistories(updatedHistories);
-    localStorage.setItem(`examHistory_${courseId}`, JSON.stringify(updatedHistories));
+    
+    try {
+      localStorage.setItem(`examHistory_${courseId}`, JSON.stringify(updatedHistories));
+    } catch (e) {}
     
     setViewingHistoryIndex(0); // View the just saved one
     setExamState('SUMMARY');
@@ -196,6 +191,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
   };
 
   const formatTime = (seconds: number) => {
+    if (isNaN(seconds)) return "0 วิ";
     if (seconds < 60) return `${seconds} วิ`;
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
@@ -203,6 +199,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
   };
 
   const formatGlobalTime = (seconds: number) => {
+    if (isNaN(seconds)) return "00:00";
     const m = Math.floor(seconds / 60).toString().padStart(2, '0');
     const s = (seconds % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
@@ -267,7 +264,6 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     );
   }
 
-  
   if (examState === 'SELECT_COUNT') {
     const availableRaw = selectedChapterIndex === 'ALL' 
       ? totalValidQuestions 
@@ -280,22 +276,22 @@ export default function ExamClient({ courseId }: ExamClientProps) {
 
     const countOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
     const validCounts = countOptions.filter(n => n <= available);
-    if (available > 0 && !validCounts.includes(available)) validCounts.push(available); // Add exact max if not in list
+    if (available > 0 && !validCounts.includes(available)) validCounts.push(available);
 
-    // Default to max if available < 10, else 10
+    // Initialize selectedCount safely
     useEffect(() => {
       if (examState === 'SELECT_COUNT' && validCounts.length > 0) {
         if (!validCounts.includes(selectedCount)) {
           setSelectedCount(validCounts[0]);
         }
       }
-    }, [examState, validCounts]);
+    }, [examState, validCounts]); // validCounts triggers this, but we only set if missing
 
     return (
       <div className="min-h-screen bg-[#0f1115] text-white p-4 flex items-center justify-center">
         <div className="bg-[#1c1f26] p-8 rounded-2xl max-w-md w-full text-center shadow-xl">
           <h2 className="text-2xl font-bold mb-2">{chapterName}</h2>
-          <p className="text-gray-400 mb-6">มีข้อสอบทั้งหมด {available} ข้อ {selectedChapterIndex === 'ALL' && '(สูงสุด 100 ข้อ)'}</p>
+          <p className="text-gray-400 mb-6">มีข้อสอบทั้งหมด {available} ข้อ {selectedChapterIndex === 'ALL' && '(จำกัดสูงสุด 100 ข้อ)'}</p>
           
           <div className="mb-6">
             <label className="block text-sm text-gray-400 mb-3 text-left font-medium">ตั้งเวลาสอบ (นาที)</label>
@@ -345,46 +341,73 @@ export default function ExamClient({ courseId }: ExamClientProps) {
       </div>
     );
   }
-if (examState === 'TESTING') {
+
+  if (examState === 'TESTING') {
     const q = currentQuestions[currentIndex];
+    if (!q) {
+      return (
+        <div className="min-h-screen bg-[#0f1115] text-white flex items-center justify-center">
+          <div className="text-center p-8 bg-[#1c1f26] rounded-2xl">
+             เกิดข้อผิดพลาดในการโหลดข้อสอบ
+             <br/><br/>
+             <button onClick={() => setExamState('SELECT_CHAPTER')} className="bg-blue-600 px-6 py-2 rounded-lg">กลับไปเลือกบท</button>
+          </div>
+        </div>
+      );
+    }
     
     return (
-      <div className="min-h-screen bg-[#0f1115] text-white flex">
+      <div className="min-h-screen bg-[#0f1115] text-white flex flex-col lg:flex-row">
         
-        {/* Left Sidebar (Selected Options) */}
-        <div className="hidden lg:flex w-64 bg-[#1c1f26] border-r border-gray-800 flex-col h-screen sticky top-0 overflow-hidden shrink-0">
-          <div className="p-4 border-b border-gray-800 font-bold text-lg flex items-center gap-2 text-blue-400">
-            <BookOpen size={20} /> คำตอบของคุณ
+        <div className="lg:hidden p-4 bg-[#1c1f26] border-b border-gray-800 flex justify-between items-center sticky top-0 z-50">
+          <div className="font-bold text-blue-400 flex items-center gap-2"><BookOpen size={18}/> ข้อ {currentIndex + 1}/{currentQuestions.length}</div>
+          {globalTimeRemaining !== null && (
+            <div className={`font-bold flex items-center gap-2 ${globalTimeRemaining < 60 ? 'text-red-500 animate-pulse' : 'text-blue-400'}`}>
+              <Clock size={16} /> {formatGlobalTime(globalTimeRemaining)}
+            </div>
+          )}
+        </div>
+
+        <div className="hidden lg:flex w-80 bg-[#1c1f26] border-r border-gray-800 flex-col h-screen sticky top-0 overflow-hidden shrink-0 shadow-2xl z-40">
+          <div className="p-5 border-b border-gray-800 font-bold text-lg flex items-center justify-between text-blue-400">
+            <div className="flex items-center gap-2"><BookOpen size={20} /> คำตอบของคุณ</div>
+            <div className="text-sm text-gray-500 bg-black/20 px-2 py-1 rounded">{userAnswers.filter(a => a !== null).length}/{currentQuestions.length}</div>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
             {currentQuestions.map((_, i) => {
               const ansText = userAnswers[i];
-              let shortAns = "-";
-              if (ansText) {
-                const optIdx = currentQuestions[i].options.indexOf(ansText);
-                if (optIdx !== -1) shortAns = THAI_CHOICES[optIdx];
-              }
+              const isCurrent = currentIndex === i;
               
               return (
                 <button
                   key={i}
                   onClick={() => setCurrentIndex(i)}
-                  className={`w-full text-left p-2 rounded flex items-center justify-between text-sm transition ${currentIndex === i ? 'bg-blue-600/20 text-blue-400 font-bold' : 'hover:bg-[#2a2d35]'}`}
+                  className={`w-full text-left p-3 rounded-xl flex flex-col gap-1 transition border ${
+                    isCurrent 
+                      ? 'bg-blue-600/10 border-blue-500/50 text-blue-400' 
+                      : ansText 
+                        ? 'bg-green-500/10 border-green-500/30 hover:bg-green-500/20' 
+                        : 'bg-[#202228] border-transparent hover:bg-[#2a2d35]'
+                  }`}
                 >
-                  <span className="text-gray-400">ข้อ {i + 1}</span>
-                  <span className={`font-medium ${ansText ? 'text-green-400' : 'text-gray-600'}`}>{shortAns}</span>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className={ansText ? 'text-green-400 font-bold' : 'text-gray-500'}>ข้อ {i + 1}</span>
+                    {ansText && <CheckCircle size={12} className="text-green-500" />}
+                  </div>
+                  <div className={`text-sm line-clamp-2 leading-snug ${ansText ? 'text-gray-200' : 'text-gray-600'}`}>
+                    {ansText ? ansText : 'ยังไม่ได้ตอบ'}
+                  </div>
                 </button>
               )
             })}
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col relative w-full">
-          <div className="w-full max-w-3xl mx-auto p-4 flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col relative w-full h-full lg:h-screen overflow-y-auto">
+          <div className="w-full max-w-3xl mx-auto p-4 md:p-8 flex-1 flex flex-col pb-32">
             
-            {/* Header */}
-            <div className="flex justify-between items-center mb-6 text-sm text-gray-400 bg-[#1c1f26] p-4 rounded-xl shadow-sm">
-              <button onClick={() => setExamState('SELECT_CHAPTER')} className="hover:text-white transition flex items-center gap-1">← ออก</button>
+            <div className="hidden lg:flex justify-between items-center mb-8 text-sm text-gray-400 bg-[#1c1f26] p-4 rounded-xl shadow-sm border border-gray-800">
+              <button onClick={() => setExamState('SELECT_CHAPTER')} className="hover:text-white transition flex items-center gap-1">← กลับหน้าเลือกข้อสอบ</button>
               
               <div className="flex items-center gap-4">
                 {globalTimeRemaining !== null && (
@@ -396,43 +419,40 @@ if (examState === 'TESTING') {
               </div>
             </div>
             
-            {/* Question */}
-            <div className="mb-8 text-xl md:text-2xl font-medium leading-relaxed bg-[#1c1f26] p-6 rounded-2xl shadow-sm border border-gray-800/50">
-              <span className="text-blue-500 mr-2">{currentIndex + 1}.</span> {q.question}
+            <div className="mb-8 text-xl md:text-2xl font-medium leading-relaxed bg-[#1c1f26] p-6 md:p-8 rounded-2xl shadow-sm border border-gray-800/50">
+              <span className="text-blue-500 mr-2 font-bold">{currentIndex + 1}.</span> {q.question}
             </div>
             
-            {/* Options */}
-            <div className="space-y-3 mb-12">
+            <div className="space-y-4 mb-12">
               {q.options.map((opt, i) => (
                 <button
                   key={i}
                   onClick={() => handleSelectAnswer(i, opt)}
-                  className={`w-full text-left p-5 rounded-xl border-2 transition-all duration-200 ${
+                  className={`w-full text-left p-5 md:p-6 rounded-2xl border-2 transition-all duration-200 ${
                     userAnswers[currentIndex] === opt 
-                      ? 'border-blue-500 bg-blue-500/10 shadow-[0_0_15px_rgba(59,130,246,0.15)]' 
+                      ? 'border-blue-500 bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.15)]' 
                       : 'border-transparent bg-[#1c1f26] hover:bg-[#2a2d35] hover:border-gray-700'
                   }`}
                 >
                   <div className="flex items-start gap-4">
-                    <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm transition-colors ${
+                    <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm transition-colors mt-0.5 ${
                       userAnswers[currentIndex] === opt 
                         ? 'bg-blue-500 text-white' 
                         : 'bg-gray-800 text-gray-400'
                     }`}>
-                      {THAI_CHOICES[i]?.replace('.', '')}
+                      {THAI_CHOICES[i]?.replace('.', '') || (i+1)}
                     </div>
-                    <span className="text-base pt-1">{opt}</span>
+                    <span className="text-base md:text-lg pt-1 leading-relaxed">{opt}</span>
                   </div>
                 </button>
               ))}
             </div>
             
-            {/* Footer Controls */}
-            <div className="mt-auto flex justify-between items-center pb-28">
+            <div className="mt-auto flex justify-between items-center pt-8 border-t border-gray-800/50">
               <button 
                 onClick={() => setCurrentIndex(c => Math.max(0, c - 1))}
                 disabled={currentIndex === 0}
-                className={`px-6 py-3 rounded-xl font-medium transition ${currentIndex === 0 ? 'opacity-0 cursor-default' : 'bg-[#1c1f26] hover:bg-[#2a2d35]'}`}
+                className={`px-6 py-3 rounded-xl font-medium transition ${currentIndex === 0 ? 'opacity-0 cursor-default pointer-events-none' : 'bg-[#1c1f26] hover:bg-[#2a2d35] border border-gray-800'}`}
               >
                 ← ข้อก่อนหน้า
               </button>
@@ -447,44 +467,72 @@ if (examState === 'TESTING') {
               ) : (
                 <button 
                   onClick={() => setCurrentIndex(c => Math.min(currentQuestions.length - 1, c + 1))}
-                  className="px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 transition font-medium shadow-lg shadow-blue-600/20"
+                  className="px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 transition font-medium shadow-lg shadow-blue-600/20 text-white"
                 >
                   ข้อถัดไป →
                 </button>
               )}
             </div>
           </div>
+          
+          <div className="lg:hidden fixed bottom-6 right-6 z-40 flex flex-col gap-3">
+             <button 
+                onClick={() => {
+                  const el = document.getElementById('mobile-sidebar');
+                  if (el) el.classList.toggle('hidden');
+                }}
+                className="w-14 h-14 bg-gray-800 text-white rounded-full flex items-center justify-center shadow-2xl border border-gray-700"
+              >
+                <BookOpen size={24} />
+             </button>
+          </div>
 
-          {/* Navigation Grid (Bottom Mobile) */}
-          <div className="fixed bottom-0 w-full lg:w-[calc(100%-16rem)] bg-[#1c1f26] border-t border-gray-800 p-4 z-40 lg:right-0">
-            <div className="max-w-3xl mx-auto flex flex-wrap gap-2 justify-center max-h-32 overflow-y-auto px-2 pb-2">
-              {currentQuestions.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentIndex(i)}
-                  className={`w-10 h-10 rounded-lg font-medium text-sm transition-all flex items-center justify-center ${
-                    currentIndex === i ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-[#1c1f26]' : ''
-                  } ${userAnswers[i] ? 'bg-green-600/30 text-green-400 border border-green-600/50' : 'bg-[#2a2d35] hover:bg-[#3a3d45] text-gray-400'}`}
-                >
-                  {i + 1}
-                </button>
-              ))}
+          <div id="mobile-sidebar" className="hidden lg:hidden fixed inset-0 z-50 bg-black/90 flex flex-col">
+            <div className="p-4 border-b border-gray-800 flex justify-between items-center bg-[#1c1f26]">
+              <div className="font-bold text-lg text-blue-400 flex items-center gap-2"><BookOpen size={20} /> คำตอบของคุณ</div>
+              <button onClick={() => document.getElementById('mobile-sidebar')?.classList.add('hidden')} className="p-2 bg-gray-800 rounded-lg text-white"><XCircle size={20}/></button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
+              {currentQuestions.map((_, i) => {
+                const ansText = userAnswers[i];
+                const isCurrent = currentIndex === i;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => { setCurrentIndex(i); document.getElementById('mobile-sidebar')?.classList.add('hidden'); }}
+                    className={`w-full text-left p-3 rounded-xl flex flex-col gap-1 transition border ${
+                      isCurrent 
+                        ? 'bg-blue-600/10 border-blue-500/50 text-blue-400' 
+                        : ansText 
+                          ? 'bg-green-500/10 border-green-500/30 hover:bg-green-500/20' 
+                          : 'bg-[#202228] border-transparent hover:bg-[#2a2d35]'
+                    }`}
+                  >
+                    <div className="flex justify-between items-center text-xs">
+                      <span className={ansText ? 'text-green-400 font-bold' : 'text-gray-500'}>ข้อ {i + 1}</span>
+                      {ansText && <CheckCircle size={12} className="text-green-500" />}
+                    </div>
+                    <div className={`text-sm line-clamp-2 leading-snug ${ansText ? 'text-gray-200' : 'text-gray-600'}`}>
+                      {ansText ? ansText : 'ยังไม่ได้ตอบ'}
+                    </div>
+                  </button>
+                )
+              })}
             </div>
           </div>
         </div>
 
-        {/* Submit Modal */}
         {isSubmitConfirmOpen && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-            <div className="bg-[#1c1f26] p-8 rounded-2xl max-w-sm w-full text-center border border-gray-800 shadow-2xl">
-              <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-500">
-                <AlertCircle size={32} />
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] p-4 backdrop-blur-sm">
+            <div className="bg-[#1c1f26] p-8 rounded-3xl max-w-sm w-full text-center border border-gray-800 shadow-2xl">
+              <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-500">
+                <AlertCircle size={40} />
               </div>
-              <h3 className="text-xl font-bold mb-2">ยืนยันการส่งคำตอบ?</h3>
-              <p className="text-gray-400 mb-8">คุณทำไปแล้ว <span className="text-white font-bold">{userAnswers.filter(a => a !== null).length}</span> จาก <span className="text-white font-bold">{currentQuestions.length}</span> ข้อ</p>
-              <div className="flex gap-4">
-                <button onClick={() => setIsSubmitConfirmOpen(false)} className="flex-1 p-3 rounded-xl bg-[#2a2d35] hover:bg-[#3a3d45] font-medium transition">ทบทวนอีกครั้ง</button>
-                <button onClick={() => handleSubmitTest(false)} className="flex-1 p-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold transition">ส่งคำตอบเลย</button>
+              <h3 className="text-2xl font-bold mb-3">ยืนยันการส่งคำตอบ?</h3>
+              <p className="text-gray-400 mb-8 text-lg">คุณทำไปแล้ว <span className="text-white font-bold text-xl">{userAnswers.filter(a => a !== null).length}</span> จาก <span className="text-white font-bold text-xl">{currentQuestions.length}</span> ข้อ</p>
+              <div className="flex flex-col gap-3">
+                <button onClick={() => handleSubmitTest(false)} className="w-full p-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-white text-lg transition shadow-lg shadow-blue-600/20">ส่งคำตอบเลย</button>
+                <button onClick={() => setIsSubmitConfirmOpen(false)} className="w-full p-4 rounded-xl bg-transparent hover:bg-[#2a2d35] text-gray-400 font-medium transition">ทบทวนอีกครั้ง</button>
               </div>
             </div>
           </div>
@@ -493,11 +541,9 @@ if (examState === 'TESTING') {
     );
   }
 
-  // SUMMARY & HISTORY VIEWER
   if (examState === 'SUMMARY' || examState === 'HISTORY') {
     const historyData = viewingHistoryIndex !== null ? examHistories[viewingHistoryIndex] : null;
     
-    // If we are in HISTORY mode but haven't selected a specific history yet, show the list
     if (examState === 'HISTORY' && viewingHistoryIndex === null) {
       return (
         <div className="min-h-screen bg-[#0f1115] text-white p-4 md:p-8 font-sans">
@@ -568,7 +614,6 @@ if (examState === 'TESTING') {
             </div>
           </div>
 
-          {/* GRID 3 COLUMNS */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {historyData.questions.map((q, i) => {
               const uAns = historyData.userAnswers[i];
@@ -604,7 +649,7 @@ if (examState === 'TESTING') {
                       }
                       return (
                         <div key={j} className={optClass + " flex items-start gap-2"}>
-                          <span className="font-bold text-gray-500 pt-0.5">{THAI_CHOICES[j]}</span>
+                          <span className="font-bold text-gray-500 pt-0.5">{THAI_CHOICES[j] || (j+1)}</span>
                           <span className="flex-1 leading-snug">{opt}</span>
                           {icon && <div className="mt-0.5">{icon}</div>}
                         </div>
@@ -629,7 +674,6 @@ if (examState === 'TESTING') {
             >
               ทำแบบทดสอบใหม่
             </button>
-            
           </div>
         </div>
       </div>
