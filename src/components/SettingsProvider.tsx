@@ -56,12 +56,21 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('fontSize', newSize);
   };
 
+  // Always provide the context, even during SSR
+  const providerValue = { theme, setTheme, fontSize, setFontSize };
+  
   if (!mounted) {
-    return <>{children}</>;
+    return (
+      <SettingsContext.Provider value={providerValue}>
+        <div className="transition-all duration-300 h-full flex flex-col flex-1">
+          {children}
+        </div>
+      </SettingsContext.Provider>
+    );
   }
 
   return (
-    <SettingsContext.Provider value={{ theme, setTheme, fontSize, setFontSize }}>
+    <SettingsContext.Provider value={providerValue}>
       <div className={`${{ sm: 'text-sm', base: 'text-base', lg: 'text-lg' }[fontSize]} transition-all duration-300 h-full flex flex-col flex-1`}>
         {children}
       </div>
