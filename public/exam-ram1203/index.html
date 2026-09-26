@@ -895,15 +895,15 @@
 
         currentQuestions.forEach((q, i) => {
             const ua = userAnswers[i];
-            if (ua === q.answer) { score++; }
+            if (ua === q.answer || (ua !== null && q.options[ua] === q.answer)) { score++; }
             else {
                 const uaText = ua !== null ? q.options[ua] : 'ไม่ได้ตอบ';
-                mistakesLog.push({ questionText: 'ข้อ ' + (i+1) + '. ' + q.question, userAnsText: uaText, correctAnsText: q.options[q.answer], explanation: q.explanation });
+                mistakesLog.push({ questionText: 'ข้อ ' + (i+1) + '. ' + q.question, userAnsText: uaText, correctAnsText: (typeof q.answer === 'number' ? q.options[q.answer] : q.answer), explanation: q.explanation });
                 const d = document.createElement('div');
                 d.className = 'mistake-card';
                 d.innerHTML = '<div class="mistake-q">' + 'ข้อ '+(i+1)+'. '+q.question + '</div>'
                     + '<div class="mistake-wrong">คุณตอบ: '+uaText+'</div>'
-                    + '<div class="mistake-correct">✓ '+q.options[q.answer]+'</div>'
+                    + '<div class="mistake-correct">✓ '+(typeof q.answer === 'number' ? q.options[q.answer] : q.answer)+'</div>'
                     + (q.explanation ? '<div class="mistake-explain">'+q.explanation+'</div>' : '');
                 mc.appendChild(d);
             }
