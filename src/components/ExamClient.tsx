@@ -278,14 +278,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     const validCounts = countOptions.filter(n => n <= available);
     if (available > 0 && !validCounts.includes(available)) validCounts.push(available);
 
-    // Initialize selectedCount safely
-    useEffect(() => {
-      if (examState === 'SELECT_COUNT' && validCounts.length > 0) {
-        if (!validCounts.includes(selectedCount)) {
-          setSelectedCount(validCounts[0]);
-        }
-      }
-    }, [examState, validCounts]); // validCounts triggers this, but we only set if missing
+
 
     return (
       <div className="min-h-screen bg-[#0f1115] text-white p-4 flex items-center justify-center">
@@ -315,7 +308,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                 <button 
                   key={n}
                   onClick={() => setSelectedCount(n)}
-                  className={`p-3 rounded-xl font-medium transition flex items-center justify-center gap-2 ${selectedCount === n ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-[#2a2d35] text-gray-400 hover:bg-[#3a3d45]'}`}
+                  className={`p-3 rounded-xl font-medium transition flex items-center justify-center gap-2 ${(selectedCount === n || (!validCounts.includes(selectedCount) && n === validCounts[0])) ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-[#2a2d35] text-gray-400 hover:bg-[#3a3d45]'}`}
                 >
                   {n === available && n !== 100 && !countOptions.includes(n) ? `ทั้งหมด (${n})` : `${n} ข้อ`}
                 </button>
@@ -324,7 +317,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
           </div>
 
           <button 
-            onClick={() => startTest(selectedCount)}
+            onClick={() => startTest(validCounts.includes(selectedCount) ? selectedCount : validCounts[0])}
             disabled={available === 0}
             className={`w-full p-4 rounded-xl font-bold text-lg transition flex items-center justify-center gap-2 ${available > 0 ? 'bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-600/30' : 'bg-[#202228] text-gray-600 cursor-not-allowed'}`}
           >
