@@ -150,7 +150,7 @@ export const categories: Category[] = [
   {
     "id": "Ram1203",
     "title": "RAM1203 ศาสตร์การคิดเปลี่ยนโลก",
-    "quizUrl": undefined,
+    "quizUrl": "/exam-ram1203/index.html",
     "books": [
       {
         "id": "Ram1203-ch1",
