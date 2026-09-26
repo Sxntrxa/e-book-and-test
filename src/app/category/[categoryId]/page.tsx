@@ -15,7 +15,7 @@ export default function CategoryPage() {
   if (!category) {
     return (
       <div className="flex flex-col h-screen w-full items-center justify-center bg-gray-50 text-gray-800">
-        <h1 className="text-2xl mb-4 text-red-500 font-bold">ไม่พบหมวดหมู่นี้</h1>
+        <h1 className="text-2xl mb-4 text-danger font-bold">ไม่พบหมวดหมู่นี้</h1>
         <Link href="/" className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition">
           กลับหน้าแรก
         </Link>

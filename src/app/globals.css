@@ -20,6 +20,14 @@
   
   /* Text colors */
   --text-muted: #4b5563; /* gray-600 */
+
+  /* Semantic Text Colors for Light Mode */
+  --text-success: #166534; /* green-800 */
+  --text-danger: #991b1b; /* red-800 */
+  --text-info: #1e40af; /* blue-800 */
+  --text-primary-btn: #1d4ed8; /* blue-700 */
+  --bg-modal: rgba(255, 255, 255, 0.85);
+
 }
 
 html.dark {
@@ -42,6 +50,14 @@ html.dark {
   
   /* Text colors */
   --text-muted: #9ca3af; /* gray-400 */
+
+  /* Semantic Text Colors for Dark Mode */
+  --text-success: #4ade80; /* green-400 */
+  --text-danger: #f87171; /* red-400 */
+  --text-info: #60a5fa; /* blue-400 */
+  --text-primary-btn: #60a5fa; /* blue-400 */
+  --bg-modal: rgba(20, 20, 25, 0.85);
+
 }
 
 @theme inline {
@@ -132,3 +148,9 @@ html.font-sm { font-size: 14px; }
 html.font-base { font-size: 16px; }
 html.font-lg { font-size: 18px; }
 html.font-xl { font-size: 20px; }
+
+.text-success { color: var(--text-success); }
+.text-danger { color: var(--text-danger); }
+.text-info { color: var(--text-info); }
+.text-primary-btn { color: var(--text-primary-btn); }
+.bg-modal { background: var(--bg-modal); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); }
