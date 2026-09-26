@@ -122,10 +122,20 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     }
   }, [globalTimeRemaining, examState]);
 
+  const totalValidQuestions = useMemo(() => allQuizzes.reduce((acc, q) => acc + (q ? q.length : 0), 0), [allQuizzes]);
+
+  // Optimized available questions calculation
+  const availableRaw = useMemo(() => {
+    if (examState !== 'SELECT_COUNT') return 0;
+    if (selectedChapterIndex === 'ALL') {
+      return Array.from(new Map(allQuizzes.filter(q => q !== null).flat().map(item => [item.question, item])).values()).length;
+    }
+    return Array.from(new Map((allQuizzes[selectedChapterIndex as number] || []).map(item => [item.question, item])).values()).length;
+  }, [examState, selectedChapterIndex, allQuizzes]);
+
   if (!category) return <div className="p-8 text-center">ไม่พบรายวิชา</div>;
   if (loading) return <div className="p-8 flex items-center justify-center min-h-screen text-xl">กำลังโหลดข้อสอบ...</div>;
 
-  const totalValidQuestions = useMemo(() => allQuizzes.reduce((acc, q) => acc + (q ? q.length : 0), 0), [allQuizzes]);
 
   const startTest = (count: number) => {
     let pool: Question[] = [];
@@ -273,14 +283,6 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     );
   }
 
-  // Optimized available questions calculation
-  const availableRaw = useMemo(() => {
-    if (examState !== 'SELECT_COUNT') return 0;
-    if (selectedChapterIndex === 'ALL') {
-      return Array.from(new Map(allQuizzes.filter(q => q !== null).flat().map(item => [item.question, item])).values()).length;
-    }
-    return Array.from(new Map((allQuizzes[selectedChapterIndex as number] || []).map(item => [item.question, item])).values()).length;
-  }, [examState, selectedChapterIndex, allQuizzes]);
 
   if (examState === 'SELECT_COUNT') {
     const available = selectedChapterIndex === 'ALL' ? Math.min(availableRaw, 100) : availableRaw;
