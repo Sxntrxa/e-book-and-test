@@ -361,12 +361,12 @@ export default function ExamClient({ courseId }: ExamClientProps) {
           )}
         </div>
 
-        <div className="hidden lg:flex w-80 bg-[#1c1f26] border-r border-gray-800 flex-col h-screen sticky top-0 overflow-hidden shrink-0 shadow-2xl z-40">
+        <div className="hidden lg:flex w-[350px] xl:w-[450px] bg-[#1c1f26] border-r border-gray-800 flex-col h-screen sticky top-0 overflow-hidden shrink-0 shadow-2xl z-40">
           <div className="p-5 border-b border-gray-800 font-bold text-lg flex items-center justify-between text-blue-400">
             <div className="flex items-center gap-2"><BookOpen size={20} /> คำตอบของคุณ</div>
             <div className="text-sm text-gray-500 bg-black/20 px-2 py-1 rounded">{userAnswers.filter(a => a !== null).length}/{currentQuestions.length}</div>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 grid grid-cols-2 gap-2 content-start custom-scrollbar">
+          <div className="flex-1 overflow-y-auto p-4 grid grid-cols-2 xl:grid-cols-3 gap-2 content-start custom-scrollbar">
             {currentQuestions.map((_, i) => {
               const ansText = userAnswers[i];
               const isCurrent = currentIndex === i;
@@ -397,7 +397,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
         </div>
 
         <div className="flex-1 flex flex-col relative w-full h-full lg:h-screen overflow-y-auto">
-          <div className="w-full max-w-3xl mx-auto p-4 md:p-8 flex-1 flex flex-col pb-32">
+          <div className="w-full max-w-5xl mx-auto p-4 md:p-8 flex-1 flex flex-col pb-32">
             
             <div className="hidden lg:flex justify-between items-center mb-8 text-sm text-gray-400 bg-[#1c1f26] p-4 rounded-xl shadow-sm border border-gray-800">
               <button onClick={() => setExamState('SELECT_CHAPTER')} className="hover:text-white transition flex items-center gap-1">← กลับหน้าเลือกข้อสอบ</button>
@@ -591,8 +591,16 @@ export default function ExamClient({ courseId }: ExamClientProps) {
 
     return (
       <div className="min-h-screen bg-[#0f1115] text-white flex flex-col items-center py-12 px-4">
-        <div className="w-full max-w-7xl">
-          <div className="text-center mb-12">
+        <div className="w-full max-w-7xl relative">
+          <div className="flex justify-start mb-6 md:absolute md:top-0 md:left-0 z-10">
+            <button 
+              onClick={() => {setViewingHistoryIndex(null); setExamState('HISTORY');}} 
+              className="text-gray-300 hover:text-white flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-xl transition"
+            >
+              <History size={18}/> กลับไปประวัติ
+            </button>
+          </div>
+          <div className="text-center mb-12 pt-4 md:pt-0">
             <h2 className="text-4xl font-bold mb-4">{examState === 'SUMMARY' ? 'ผลการทดสอบ' : 'เฉลยข้อสอบ'}</h2>
             <div className="inline-block bg-[#1c1f26] px-10 py-6 rounded-3xl shadow-xl border border-gray-800">
               <div className="text-gray-400 mb-2">{historyData.chapterName}</div>
@@ -666,6 +674,12 @@ export default function ExamClient({ courseId }: ExamClientProps) {
               className="px-8 py-4 rounded-xl bg-[#2a2d35] hover:bg-[#3a3d45] font-bold text-lg transition flex items-center justify-center gap-2"
             >
               ทำแบบทดสอบใหม่
+            </button>
+            <button 
+              onClick={() => {setViewingHistoryIndex(null); setExamState('HISTORY');}}
+              className="px-8 py-4 rounded-xl bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 font-bold text-lg transition flex items-center justify-center gap-2"
+            >
+              <History size={20} /> กลับไปประวัติ
             </button>
           </div>
         </div>
