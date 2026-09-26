@@ -18,6 +18,8 @@ export default function SettingsMenu() {
       </button>
 
       {isOpen && (
+        <>
+        <div className="fixed inset-0 z-[-1]" onClick={() => setIsOpen(false)} />
         <div className="absolute top-12 right-0 w-64 glass-panel-heavy p-4 rounded-2xl shadow-2xl origin-top-right animate-in fade-in zoom-in-95 duration-200">
           <h3 className="text-lg font-bold mb-4 border-b border-white/10 pb-2">ตั้งค่าระบบ</h3>
           
@@ -67,6 +69,7 @@ export default function SettingsMenu() {
             </div>
           </div>
         </div>
+        </>
       )}
     </div>
   );
