@@ -601,7 +601,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     return (
       <div className="min-h-screen bg-transparent flex flex-col items-center py-12 px-4">
         <div className="w-full max-w-7xl relative">
-          <div className="flex justify-start mb-6 md:absolute md:top-0 md:left-0 z-10">
+          <div className="flex justify-end mb-6 md:absolute md:top-0 md:right-16 lg:right-0 z-10">
             <button 
               onClick={() => {setViewingHistoryIndex(null); setExamState('HISTORY');}} 
               className=" hover:text-white flex items-center gap-2 px-4 py-2 glass-button hover:bg-white/10 rounded-xl transition"
