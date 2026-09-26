@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 text-gray-900 font-sans">
       {/* Header */}
-      <header className="bg-blue-900 text-white p-6 shadow-md">
+      <header className="bg-blue-900 p-6 shadow-md">
         <div className="max-w-6xl mx-auto flex items-center gap-3">
           <Library size={32} className="text-blue-300" />
           <h1 className="text-2xl font-bold tracking-wide">ห้องสมุดดิจิทัล (Digital Library)</h1>
@@ -49,7 +49,7 @@ export default function Home() {
                       <span className="block">{category.title}</span>
                     )}
                   </h3>
-                  <p className="text-sm text-gray-500 mt-1.5 font-medium">
+                  <p className="text-sm text-muted mt-1.5 font-medium">
                     {category.books.length} บทเรียน
                   </p>
                 </div>

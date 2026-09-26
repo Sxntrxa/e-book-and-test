@@ -122,8 +122,8 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     }
   }, [globalTimeRemaining, examState]);
 
-  if (!category) return <div className="p-8 text-white text-center">ไม่พบรายวิชา</div>;
-  if (loading) return <div className="p-8 flex items-center justify-center min-h-screen text-white text-xl">กำลังโหลดข้อสอบ...</div>;
+  if (!category) return <div className="p-8 text-center">ไม่พบรายวิชา</div>;
+  if (loading) return <div className="p-8 flex items-center justify-center min-h-screen text-xl">กำลังโหลดข้อสอบ...</div>;
 
   const totalValidQuestions = allQuizzes.reduce((acc, q) => acc + (q ? q.length : 0), 0);
 
@@ -207,12 +207,12 @@ export default function ExamClient({ courseId }: ExamClientProps) {
 
   if (examState === 'SELECT_CHAPTER') {
     return (
-      <div className="min-h-screen bg-transparent text-white p-4 md:p-8 font-sans">
+      <div className="min-h-screen bg-transparent p-4 md:p-8 font-sans">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-2">{category.title}</h1>
-              <p className="text-gray-400">เลือกบทที่ต้องการทดสอบ</p>
+              <p className="text-muted">เลือกบทที่ต้องการทดสอบ</p>
             </div>
             <div className="flex gap-3">
               {examHistories.length > 0 && (
@@ -230,7 +230,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
           </div>
 
           <div className="glass-panel p-6 rounded-2xl">
-            <h2 className="text-lg font-semibold mb-4 text-gray-300">บทเรียนทั้งหมด</h2>
+            <h2 className="text-lg font-semibold mb-4 ">บทเรียนทั้งหมด</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {category.books.map((book, i) => {
                 const data = allQuizzes[i];
@@ -241,7 +241,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                     disabled={!isReady}
                     onClick={() => { setSelectedChapterIndex(i); setExamState('SELECT_COUNT'); }}
                     className={`p-4 rounded-xl text-sm font-medium transition flex flex-col items-center justify-center min-h-[80px] text-center
-                      ${isReady ? 'glass-button hover:bg-white/10 text-blue-400' : 'glass-button text-gray-600 cursor-not-allowed opacity-60'}`}
+                      ${isReady ? 'glass-button hover:bg-white/10 text-blue-400' : 'glass-button text-muted cursor-not-allowed opacity-60'}`}
                   >
                     <span>{book.title}</span>
                     {!isReady && <span className="text-xs mt-1">(ยังไม่พร้อม)</span>}
@@ -252,7 +252,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
               <button
                 disabled={totalValidQuestions === 0}
                 onClick={() => { setSelectedChapterIndex('ALL'); setExamState('SELECT_COUNT'); }}
-                className="p-4 rounded-xl text-sm font-bold transition bg-blue-600 hover:bg-blue-500 text-white min-h-[80px] flex flex-col items-center justify-center"
+                className="p-4 rounded-xl text-sm font-bold transition bg-blue-600 hover:bg-blue-500 min-h-[80px] flex flex-col items-center justify-center"
               >
                 <span>🎲 สุ่มรวมทุกบท</span>
                 <span className="text-xs mt-1 font-normal">({totalValidQuestions} ข้อ)</span>
@@ -281,19 +281,19 @@ export default function ExamClient({ courseId }: ExamClientProps) {
 
 
     return (
-      <div className="min-h-screen bg-transparent text-white p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-transparent p-4 flex items-center justify-center">
         <div className="glass-panel p-8 rounded-2xl max-w-md w-full text-center shadow-xl">
           <h2 className="text-2xl font-bold mb-2">{chapterName}</h2>
-          <p className="text-gray-400 mb-6">มีข้อสอบทั้งหมด {available} ข้อ {selectedChapterIndex === 'ALL' && '(จำกัดสูงสุด 100 ข้อ)'}</p>
+          <p className="text-muted mb-6">มีข้อสอบทั้งหมด {available} ข้อ {selectedChapterIndex === 'ALL' && '(จำกัดสูงสุด 100 ข้อ)'}</p>
           
           <div className="mb-6">
-            <label className="block text-sm text-gray-400 mb-3 text-left font-medium">ตั้งเวลาสอบ (นาที)</label>
+            <label className="block text-sm text-muted mb-3 text-left font-medium">ตั้งเวลาสอบ (นาที)</label>
             <div className="grid grid-cols-4 gap-2">
               {[0, 60, 90, 120].map(m => (
                 <button
                   key={m}
                   onClick={() => setSelectedTimerMinutes(m)}
-                  className={`p-2 rounded-lg text-sm font-medium transition ${selectedTimerMinutes === m ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'glass-button text-gray-400 hover:bg-white/10'}`}
+                  className={`p-2 rounded-lg text-sm font-medium transition ${selectedTimerMinutes === m ? 'bg-purple-600 shadow-lg shadow-purple-600/30' : 'glass-button text-muted hover:bg-white/10'}`}
                 >
                   {m === 0 ? 'ไม่จำกัด' : m}
                 </button>
@@ -302,13 +302,13 @@ export default function ExamClient({ courseId }: ExamClientProps) {
           </div>
           
           <div className="mb-8">
-            <label className="block text-sm text-gray-400 mb-3 text-left font-medium">จำนวนข้อที่ต้องการทดสอบ</label>
+            <label className="block text-sm text-muted mb-3 text-left font-medium">จำนวนข้อที่ต้องการทดสอบ</label>
             <div className="grid grid-cols-2 gap-3">
               {validCounts.map(n => (
                 <button 
                   key={n}
                   onClick={() => setSelectedCount(n)}
-                  className={`p-3 rounded-xl font-medium transition flex items-center justify-center gap-2 ${(selectedCount === n || (!validCounts.includes(selectedCount) && n === validCounts[0])) ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'glass-button text-gray-400 hover:bg-white/10'}`}
+                  className={`p-3 rounded-xl font-medium transition flex items-center justify-center gap-2 ${(selectedCount === n || (!validCounts.includes(selectedCount) && n === validCounts[0])) ? 'bg-blue-600 shadow-lg shadow-blue-600/30' : 'glass-button text-muted hover:bg-white/10'}`}
                 >
                   {n === available && n !== 100 && !countOptions.includes(n) ? `ทั้งหมด (${n})` : `${n} ข้อ`}
                 </button>
@@ -319,14 +319,14 @@ export default function ExamClient({ courseId }: ExamClientProps) {
           <button 
             onClick={() => startTest(validCounts.includes(selectedCount) ? selectedCount : validCounts[0])}
             disabled={available === 0}
-            className={`w-full p-4 rounded-xl font-bold text-lg transition flex items-center justify-center gap-2 ${available > 0 ? 'bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-600/30' : 'glass-button text-gray-600 cursor-not-allowed'}`}
+            className={`w-full p-4 rounded-xl font-bold text-lg transition flex items-center justify-center gap-2 ${available > 0 ? 'bg-green-600 hover:bg-green-500 shadow-lg shadow-green-600/30' : 'glass-button text-muted cursor-not-allowed'}`}
           >
             <PlayCircle size={24} /> เริ่มทำข้อสอบ
           </button>
           
           <button 
             onClick={() => setExamState('SELECT_CHAPTER')}
-            className="mt-6 text-gray-400 hover:text-white text-sm"
+            className="mt-6 text-muted hover:text-white text-sm"
           >
             ← กลับไปเลือกบท
           </button>
@@ -339,7 +339,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     const q = currentQuestions[currentIndex];
     if (!q) {
       return (
-        <div className="min-h-screen bg-transparent text-white flex items-center justify-center">
+        <div className="min-h-screen bg-transparent flex items-center justify-center">
           <div className="text-center p-8 glass-panel rounded-2xl">
              เกิดข้อผิดพลาดในการโหลดข้อสอบ
              <br/><br/>
@@ -350,9 +350,9 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     }
     
     return (
-      <div className="min-h-screen bg-transparent text-white flex flex-col lg:flex-row">
+      <div className="min-h-screen bg-transparent flex flex-col lg:flex-row">
         
-        <div className="lg:hidden p-4 glass-panel border-b border-gray-800 flex justify-between items-center sticky top-0 z-50">
+        <div className="lg:hidden p-4 glass-panel border-b border-[var(--glass-border)] flex justify-between items-center sticky top-0 z-50">
           <div className="font-bold text-blue-400 flex items-center gap-2"><BookOpen size={18}/> ข้อ {currentIndex + 1}/{currentQuestions.length}</div>
           {globalTimeRemaining !== null && (
             <div className={`font-bold flex items-center gap-2 ${globalTimeRemaining < 60 ? 'text-red-500 animate-pulse' : 'text-blue-400'}`}>
@@ -361,10 +361,10 @@ export default function ExamClient({ courseId }: ExamClientProps) {
           )}
         </div>
 
-        <div className="hidden lg:flex lg:w-1/3 xl:w-[35%] glass-panel border-r border-gray-800 flex-col h-screen sticky top-0 overflow-hidden shrink-0 shadow-2xl z-40">
-          <div className="p-5 border-b border-gray-800 font-bold text-lg flex items-center justify-between text-blue-400">
+        <div className="hidden lg:flex lg:w-1/3 xl:w-[35%] glass-panel border-r border-[var(--glass-border)] flex-col h-screen sticky top-0 overflow-hidden shrink-0 shadow-2xl z-40">
+          <div className="p-5 border-b border-[var(--glass-border)] font-bold text-lg flex items-center justify-between text-blue-400">
             <div className="flex items-center gap-2"><BookOpen size={20} /> คำตอบของคุณ</div>
-            <div className="text-sm text-gray-500 bg-black/20 px-2 py-1 rounded">{userAnswers.filter(a => a !== null).length}/{currentQuestions.length}</div>
+            <div className="text-sm text-muted bg-black/20 px-2 py-1 rounded">{userAnswers.filter(a => a !== null).length}/{currentQuestions.length}</div>
           </div>
           <div className="flex-1 overflow-y-auto p-6 grid grid-cols-2 gap-4 content-start custom-scrollbar">
             {currentQuestions.map((_, i) => {
@@ -384,10 +384,10 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                   }`}
                 >
                   <div className="flex justify-between items-center text-xs">
-                    <span className={ansText ? 'text-green-400 font-bold' : 'text-gray-500'}>ข้อ {i + 1}</span>
+                    <span className={ansText ? 'text-green-400 font-bold' : 'text-muted'}>ข้อ {i + 1}</span>
                     {ansText && <CheckCircle size={12} className="text-green-500" />}
                   </div>
-                  <div className={`text-sm line-clamp-2 leading-snug ${ansText ? 'text-gray-200' : 'text-gray-600'}`}>
+                  <div className={`text-sm line-clamp-2 leading-snug ${ansText ? '' : 'text-muted'}`}>
                     {ansText ? ansText : 'ยังไม่ได้ตอบ'}
                   </div>
                 </button>
@@ -399,7 +399,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
         <div className="flex-1 flex flex-col relative w-full h-full lg:h-screen overflow-y-auto">
           <div className="w-full max-w-5xl mx-auto p-4 md:p-8 flex-1 flex flex-col pb-32">
             
-            <div className="hidden lg:flex justify-between items-center mb-8 text-sm text-gray-400 glass-panel p-4 rounded-xl shadow-sm border border-gray-800">
+            <div className="hidden lg:flex justify-between items-center mb-8 text-sm text-muted glass-panel p-4 rounded-xl shadow-sm border border-[var(--glass-border)]">
               <button onClick={() => setExamState('SELECT_CHAPTER')} className="hover:text-white transition flex items-center gap-1">← กลับหน้าเลือกข้อสอบ</button>
               
               <div className="flex items-center gap-4">
@@ -412,7 +412,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
               </div>
             </div>
             
-            <div className="mb-8 text-xl md:text-2xl font-medium leading-relaxed glass-panel p-6 md:p-8 rounded-2xl shadow-sm border border-gray-800/50">
+            <div className="mb-8 text-xl md:text-2xl font-medium leading-relaxed glass-panel p-6 md:p-8 rounded-2xl shadow-sm border border-[var(--glass-border)]/50">
               <span className="text-blue-500 mr-2 font-bold">{currentIndex + 1}.</span> {q.question}
             </div>
             
@@ -424,14 +424,14 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                   className={`w-full text-left p-5 md:p-6 rounded-2xl border-2 transition-all duration-200 ${
                     userAnswers[currentIndex] === opt 
                       ? 'border-blue-500 bg-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.15)]' 
-                      : 'glass-panel hover:glass-button hover:border-gray-700'
+                      : 'glass-panel hover:glass-button hover:border-[var(--glass-border)]'
                   }`}
                 >
                   <div className="flex items-start gap-4">
                     <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center font-bold text-sm transition-colors mt-0.5 ${
                       userAnswers[currentIndex] === opt 
-                        ? 'bg-blue-500 text-white' 
-                        : 'glass-button text-gray-400'
+                        ? 'bg-blue-500' 
+                        : 'glass-button text-muted'
                     }`}>
                       {THAI_CHOICES[i]?.replace('.', '') || (i+1)}
                     </div>
@@ -441,11 +441,11 @@ export default function ExamClient({ courseId }: ExamClientProps) {
               ))}
             </div>
             
-            <div className="mt-auto flex justify-between items-center pt-8 border-t border-gray-800/50">
+            <div className="mt-auto flex justify-between items-center pt-8 border-t border-[var(--glass-border)]/50">
               <button 
                 onClick={() => setCurrentIndex(c => Math.max(0, c - 1))}
                 disabled={currentIndex === 0}
-                className={`px-6 py-3 rounded-xl font-medium transition ${currentIndex === 0 ? 'opacity-0 cursor-default pointer-events-none' : 'glass-panel hover:glass-button border border-gray-800'}`}
+                className={`px-6 py-3 rounded-xl font-medium transition ${currentIndex === 0 ? 'opacity-0 cursor-default pointer-events-none' : 'glass-panel hover:glass-button border border-[var(--glass-border)]'}`}
               >
                 ← ข้อก่อนหน้า
               </button>
@@ -460,7 +460,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
               ) : (
                 <button 
                   onClick={() => setCurrentIndex(c => Math.min(currentQuestions.length - 1, c + 1))}
-                  className="px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 transition font-medium shadow-lg shadow-blue-600/20 text-white"
+                  className="px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 transition font-medium shadow-lg shadow-blue-600/20"
                 >
                   ข้อถัดไป →
                 </button>
@@ -474,16 +474,16 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                   const el = document.getElementById('mobile-sidebar');
                   if (el) el.classList.toggle('hidden');
                 }}
-                className="w-14 h-14 glass-button text-white rounded-full flex items-center justify-center shadow-2xl border border-gray-700"
+                className="w-14 h-14 glass-button rounded-full flex items-center justify-center shadow-2xl border border-[var(--glass-border)]"
               >
                 <BookOpen size={24} />
              </button>
           </div>
 
           <div id="mobile-sidebar" className="hidden lg:hidden fixed inset-0 z-50 bg-black/90 flex flex-col">
-            <div className="p-4 border-b border-gray-800 flex justify-between items-center glass-panel">
+            <div className="p-4 border-b border-[var(--glass-border)] flex justify-between items-center glass-panel">
               <div className="font-bold text-lg text-blue-400 flex items-center gap-2"><BookOpen size={20} /> คำตอบของคุณ</div>
-              <button onClick={() => document.getElementById('mobile-sidebar')?.classList.add('hidden')} className="p-2 glass-button rounded-lg text-white"><XCircle size={20}/></button>
+              <button onClick={() => document.getElementById('mobile-sidebar')?.classList.add('hidden')} className="p-2 glass-button rounded-lg"><XCircle size={20}/></button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 grid grid-cols-2 gap-3 content-start">
               {currentQuestions.map((_, i) => {
@@ -502,10 +502,10 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                     }`}
                   >
                     <div className="flex justify-between items-center text-xs">
-                      <span className={ansText ? 'text-green-400 font-bold' : 'text-gray-500'}>ข้อ {i + 1}</span>
+                      <span className={ansText ? 'text-green-400 font-bold' : 'text-muted'}>ข้อ {i + 1}</span>
                       {ansText && <CheckCircle size={12} className="text-green-500" />}
                     </div>
-                    <div className={`text-sm line-clamp-2 leading-snug ${ansText ? 'text-gray-200' : 'text-gray-600'}`}>
+                    <div className={`text-sm line-clamp-2 leading-snug ${ansText ? '' : 'text-muted'}`}>
                       {ansText ? ansText : 'ยังไม่ได้ตอบ'}
                     </div>
                   </button>
@@ -517,15 +517,15 @@ export default function ExamClient({ courseId }: ExamClientProps) {
 
         {isSubmitConfirmOpen && (
           <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[60] p-4 backdrop-blur-sm">
-            <div className="glass-panel p-8 rounded-3xl max-w-sm w-full text-center border border-gray-800 shadow-2xl">
+            <div className="glass-panel p-8 rounded-3xl max-w-sm w-full text-center border border-[var(--glass-border)] shadow-2xl">
               <div className="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-500">
                 <AlertCircle size={40} />
               </div>
               <h3 className="text-2xl font-bold mb-3">ยืนยันการส่งคำตอบ?</h3>
-              <p className="text-gray-400 mb-8 text-lg">คุณทำไปแล้ว <span className="text-white font-bold text-xl">{userAnswers.filter(a => a !== null).length}</span> จาก <span className="text-white font-bold text-xl">{currentQuestions.length}</span> ข้อ</p>
+              <p className="text-muted mb-8 text-lg">คุณทำไปแล้ว <span className="text-white font-bold text-xl">{userAnswers.filter(a => a !== null).length}</span> จาก <span className="text-white font-bold text-xl">{currentQuestions.length}</span> ข้อ</p>
               <div className="flex flex-col gap-3">
-                <button onClick={() => handleSubmitTest(false)} className="w-full p-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-white text-lg transition shadow-lg shadow-blue-600/20">ส่งคำตอบเลย</button>
-                <button onClick={() => setIsSubmitConfirmOpen(false)} className="w-full p-4 rounded-xl bg-transparent hover:glass-button text-gray-400 font-medium transition">ทบทวนอีกครั้ง</button>
+                <button onClick={() => handleSubmitTest(false)} className="w-full p-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-lg transition shadow-lg shadow-blue-600/20">ส่งคำตอบเลย</button>
+                <button onClick={() => setIsSubmitConfirmOpen(false)} className="w-full p-4 rounded-xl bg-transparent hover:glass-button text-muted font-medium transition">ทบทวนอีกครั้ง</button>
               </div>
             </div>
           </div>
@@ -539,28 +539,28 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     
     if (examState === 'HISTORY' && viewingHistoryIndex === null) {
       return (
-        <div className="min-h-screen bg-transparent text-white p-4 md:p-8 font-sans">
+        <div className="min-h-screen bg-transparent p-4 md:p-8 font-sans">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-3xl font-bold flex items-center gap-3"><History className="text-blue-500"/> ประวัติการสอบ</h2>
-              <button onClick={() => setExamState('SELECT_CHAPTER')} className="text-gray-400 hover:text-white flex items-center gap-1 transition">
+              <button onClick={() => setExamState('SELECT_CHAPTER')} className="text-muted hover:text-white flex items-center gap-1 transition">
                 <ArrowLeft size={16} /> กลับ
               </button>
             </div>
             
             {examHistories.length === 0 ? (
-              <div className="glass-panel p-12 rounded-2xl text-center text-gray-500">
+              <div className="glass-panel p-12 rounded-2xl text-center text-muted">
                 <Clock size={48} className="mx-auto mb-4 opacity-20" />
                 <p>ยังไม่มีประวัติการสอบ</p>
               </div>
             ) : (
               <div className="space-y-4">
                 {examHistories.map((hist, i) => (
-                  <div key={i} className="glass-panel p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between border border-gray-800 hover:border-gray-700 transition">
+                  <div key={i} className="glass-panel p-5 rounded-2xl flex flex-col md:flex-row md:items-center justify-between border border-[var(--glass-border)] hover:border-[var(--glass-border)] transition">
                     <div className="mb-4 md:mb-0">
-                      <div className="text-sm text-gray-400 mb-1">{new Date(hist.date).toLocaleString('th-TH')}</div>
-                      <div className="text-lg font-bold text-white">{hist.chapterName}</div>
-                      <div className="text-sm text-gray-400 mt-1 flex gap-4">
+                      <div className="text-sm text-muted mb-1">{new Date(hist.date).toLocaleString('th-TH')}</div>
+                      <div className="text-lg font-bold">{hist.chapterName}</div>
+                      <div className="text-sm text-muted mt-1 flex gap-4">
                         <span>เวลาเฉลี่ย: {formatTime(Math.floor(hist.timeSpentPerQuestion.reduce((a,b)=>a+b,0)/hist.total))} / ข้อ</span>
                       </div>
                     </div>
@@ -569,7 +569,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                         <div className={`text-3xl font-black ${hist.score / hist.total >= 0.5 ? 'text-green-500' : 'text-red-500'}`}>
                           {hist.score}
                         </div>
-                        <div className="text-xs text-gray-500">จาก {hist.total}</div>
+                        <div className="text-xs text-muted">จาก {hist.total}</div>
                       </div>
                       <button 
                         onClick={() => setViewingHistoryIndex(i)}
@@ -590,24 +590,24 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     if (!historyData) return null;
 
     return (
-      <div className="min-h-screen bg-transparent text-white flex flex-col items-center py-12 px-4">
+      <div className="min-h-screen bg-transparent flex flex-col items-center py-12 px-4">
         <div className="w-full max-w-7xl relative">
           <div className="flex justify-start mb-6 md:absolute md:top-0 md:left-0 z-10">
             <button 
               onClick={() => {setViewingHistoryIndex(null); setExamState('HISTORY');}} 
-              className="text-gray-300 hover:text-white flex items-center gap-2 px-4 py-2 glass-button hover:bg-white/10 rounded-xl transition"
+              className=" hover:text-white flex items-center gap-2 px-4 py-2 glass-button hover:bg-white/10 rounded-xl transition"
             >
               <History size={18}/> กลับไปประวัติ
             </button>
           </div>
           <div className="text-center mb-12 pt-4 md:pt-0">
             <h2 className="text-4xl font-bold mb-4">{examState === 'SUMMARY' ? 'ผลการทดสอบ' : 'เฉลยข้อสอบ'}</h2>
-            <div className="inline-block glass-panel px-10 py-6 rounded-3xl shadow-xl border border-gray-800">
-              <div className="text-gray-400 mb-2">{historyData.chapterName}</div>
+            <div className="inline-block glass-panel px-10 py-6 rounded-3xl shadow-xl border border-[var(--glass-border)]">
+              <div className="text-muted mb-2">{historyData.chapterName}</div>
               <div className={`text-6xl font-black mb-2 ${historyData.score / historyData.total >= 0.5 ? 'text-green-500' : 'text-red-500'}`}>
-                {historyData.score} <span className="text-3xl text-gray-500">/ {historyData.total}</span>
+                {historyData.score} <span className="text-3xl text-muted">/ {historyData.total}</span>
               </div>
-              <div className="text-gray-400 text-sm flex gap-4 justify-center">
+              <div className="text-muted text-sm flex gap-4 justify-center">
                 <span>ความแม่นยำ: {Math.round((historyData.score / historyData.total) * 100)}%</span>
                 <span>•</span>
                 <span>เวลาทำรวม: {formatTime(historyData.timeSpentPerQuestion.reduce((a,b)=>a+b,0))}</span>
@@ -626,14 +626,14 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                   <div className="flex justify-between items-start mb-4 gap-2 border-b border-white/5 pb-3">
                     <div className="flex items-center gap-2">
                       {isCorrect ? <CheckCircle className="text-green-500 shrink-0" size={20}/> : <XCircle className="text-red-500 shrink-0" size={20}/>}
-                      <span className="font-bold text-gray-300">ข้อ {i + 1}</span>
+                      <span className="font-bold ">ข้อ {i + 1}</span>
                     </div>
-                    <div className="text-xs bg-black/30 px-2 py-1 rounded text-gray-400 flex items-center gap-1">
+                    <div className="text-xs bg-black/30 px-2 py-1 rounded text-muted flex items-center gap-1">
                       <Clock size={12}/> {formatTime(historyData.timeSpentPerQuestion[i] || 0)}
                     </div>
                   </div>
                   
-                  <div className="text-base font-medium mb-5 text-gray-100 flex-1">{q.question}</div>
+                  <div className="text-base font-medium mb-5  flex-1">{q.question}</div>
                   
                   <div className="space-y-2 mt-auto">
                     {q.options.map((opt, j) => {
@@ -646,11 +646,11 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                         optClass += "bg-red-500/20 border-red-500 text-red-300";
                         icon = <XCircle size={14} className="shrink-0" />;
                       } else {
-                        optClass += "bg-black/20 border-transparent text-gray-500";
+                        optClass += "bg-black/20 border-transparent text-muted";
                       }
                       return (
                         <div key={j} className={optClass + " flex items-start gap-2"}>
-                          <span className="font-bold text-gray-500 pt-0.5">{THAI_CHOICES[j] || (j+1)}</span>
+                          <span className="font-bold text-muted pt-0.5">{THAI_CHOICES[j] || (j+1)}</span>
                           <span className="flex-1 leading-snug">{opt}</span>
                           {icon && <div className="mt-0.5">{icon}</div>}
                         </div>

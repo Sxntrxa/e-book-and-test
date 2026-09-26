@@ -16,7 +16,7 @@ export default function CategoryPage() {
     return (
       <div className="flex flex-col h-screen w-full items-center justify-center bg-gray-50 text-gray-800">
         <h1 className="text-2xl mb-4 text-red-500 font-bold">ไม่พบหมวดหมู่นี้</h1>
-        <Link href="/" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+        <Link href="/" className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition">
           กลับหน้าแรก
         </Link>
       </div>
@@ -26,7 +26,7 @@ export default function CategoryPage() {
   return (
     <main className="min-h-screen bg-gray-50 text-gray-900 font-sans">
       {/* Header */}
-      <header className="bg-blue-900 text-white p-6 shadow-md relative">
+      <header className="bg-blue-900 p-6 shadow-md relative">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button 
@@ -42,7 +42,7 @@ export default function CategoryPage() {
           {category.quizUrl && (
             <a 
               href={category.quizUrl}
-              className="bg-green-600 hover:bg-green-500 text-white px-5 py-2 rounded-full font-bold shadow-md transition-all transform hover:scale-105 flex items-center gap-2"
+              className="bg-green-600 hover:bg-green-500 px-5 py-2 rounded-full font-bold shadow-md transition-all transform hover:scale-105 flex items-center gap-2"
             >
               ทำแบบทดสอบ
             </a>
@@ -54,7 +54,7 @@ export default function CategoryPage() {
       <div className="max-w-6xl mx-auto p-6 mt-6">
         <h2 className="text-xl font-bold mb-6 text-gray-800 border-b-2 border-gray-200 pb-2 flex items-center justify-between">
           <span>เลือกบทเรียนที่ต้องการอ่าน</span>
-          <span className="text-sm font-normal text-gray-500">ทั้งหมด {category.books.length} บท</span>
+          <span className="text-sm font-normal text-muted">ทั้งหมด {category.books.length} บท</span>
         </h2>
         
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
@@ -74,11 +74,11 @@ export default function CategoryPage() {
                 )}
                 <div className="absolute bottom-2 right-2 flex flex-col gap-1 items-end z-20">
                   {book.totalPages && (
-                    <div className="bg-black/60 text-white text-[10px] px-2 py-0.5 rounded shadow-sm flex items-center gap-1 backdrop-blur-sm">
+                    <div className="bg-black/60 text-[10px] px-2 py-0.5 rounded shadow-sm flex items-center gap-1 backdrop-blur-sm">
                       <BookOpen size={10} /> {book.totalPages} หน้า
                     </div>
                   )}
-                  <div className="bg-blue-600/80 text-white text-xs px-2 py-0.5 rounded shadow-sm backdrop-blur-sm font-semibold">
+                  <div className="bg-blue-600/80 text-xs px-2 py-0.5 rounded shadow-sm backdrop-blur-sm font-semibold">
                     PDF
                   </div>
                 </div>

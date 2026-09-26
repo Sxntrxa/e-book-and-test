@@ -146,8 +146,8 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
   const handleZoomOut = () => setScale(s => Math.max(s - 0.2, 0.5));
   const handleResetZoom = () => setScale(1.0);
 
-  if (loading) return <div className="flex h-screen w-full items-center justify-center text-xl text-white">กำลังโหลดหนังสือ...</div>;
-  if (loadError) return <div className="flex h-screen w-full flex-col items-center justify-center text-xl text-red-500">ไม่สามารถโหลดไฟล์ PDF ได้<br/><span className="text-sm text-gray-400 mt-2">{String(loadError)}</span></div>;
+  if (loading) return <div className="flex h-screen w-full items-center justify-center text-xl">กำลังโหลดหนังสือ...</div>;
+  if (loadError) return <div className="flex h-screen w-full flex-col items-center justify-center text-xl text-red-500">ไม่สามารถโหลดไฟล์ PDF ได้<br/><span className="text-sm text-muted mt-2">{String(loadError)}</span></div>;
   if (!pdfDocument) return <div className="flex h-screen w-full items-center justify-center text-xl text-red-500">ไม่สามารถโหลดไฟล์ PDF ได้</div>;
 
   return (
@@ -155,7 +155,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
       
       {/* แถบเมนูด้านบน (โผล่มาเมื่อ showToolbar เป็น true) */}
       <div 
-        className={`absolute top-0 left-0 w-full glass-button text-white p-2 md:p-3 flex gap-2 md:gap-4 justify-center z-[70] shadow-lg items-center h-16 transition-transform duration-300 ease-in-out ${showToolbar ? 'translate-y-0' : '-translate-y-full'}`}
+        className={`absolute top-0 left-0 w-full glass-button p-2 md:p-3 flex gap-2 md:gap-4 justify-center z-[70] shadow-lg items-center h-16 transition-transform duration-300 ease-in-out ${showToolbar ? 'translate-y-0' : '-translate-y-full'}`}
       >
         {onBack && (
           <button 
@@ -251,7 +251,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
       </div>
       
       {/* Page Indicator */}
-      <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 text-white px-4 py-1.5 rounded-full text-sm font-medium tracking-wide shadow-lg backdrop-blur-sm z-[60] transition-opacity duration-300 pointer-events-none ${showToolbar ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/70 px-4 py-1.5 rounded-full text-sm font-medium tracking-wide shadow-lg backdrop-blur-sm z-[60] transition-opacity duration-300 pointer-events-none ${showToolbar ? 'opacity-100' : 'opacity-0'}`}>
         หน้า {currentPage + 1} {(!dimensions.isPortrait && currentPage !== 0 && currentPage + 1 < numPages) ? `- ${currentPage + 2}` : ''} / {numPages} (เหลืออีก {numPages - (currentPage + (!dimensions.isPortrait && currentPage !== 0 ? 2 : 1))} หน้า)
       </div>
     </div>
