@@ -238,6 +238,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
                       pageNumber={index + 1}
                       pdfDocument={pdfDocument}
                       filterClass={getFilterClass()}
+                      currentPage={currentPage}
                     />
                   ) : (
                     <div key={`page_empty_${index + 1}`} className={`bg-white ${getFilterClass()}`}></div>
