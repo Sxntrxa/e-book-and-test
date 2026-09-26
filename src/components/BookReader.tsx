@@ -11,17 +11,25 @@ interface PageProps {
   pageNumber: number;
   pdfDocument: any;
   filterClass: string;
+  currentPage: number;
 }
 
 const Page = React.forwardRef<HTMLDivElement, PageProps>(
-  ({ pageNumber, pdfDocument, filterClass }, ref) => {
+  ({ pageNumber, pdfDocument, filterClass, currentPage }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    const [isRendered, setIsRendered] = useState(false);
+    // pageNumber is 1-indexed, currentPage is 0-indexed
+    // We render pages that are within 3 pages of the current page to keep it smooth but save memory
+    const isVisible = Math.abs((pageNumber - 1) - currentPage) <= 3;
 
     useEffect(() => {
       let renderTask: any;
       
       const renderPage = async () => {
-        if (!pdfDocument || !canvasRef.current) return;
+        if (!pdfDocument || !canvasRef.current || isRendered || !isVisible) return;
+        setIsRendered(true);
+
         try {
           const page = await pdfDocument.getPage(pageNumber);
           const canvas = canvasRef.current;
@@ -61,7 +69,7 @@ const Page = React.forwardRef<HTMLDivElement, PageProps>(
           renderTask.cancel();
         }
       };
-    }, [pageNumber, pdfDocument]);
+    }, [pageNumber, pdfDocument, isVisible, isRendered]);
 
     return (
       <div ref={ref} className={`bg-white overflow-hidden ${filterClass}`}>
@@ -217,7 +225,7 @@ export default function BookReader({ pdfUrl, onBack }: { pdfUrl: string, onBack?
                 mobileScrollSupport={true}
                 showPageCorners={false} 
                 usePortrait={true} 
-                flippingTime={450} 
+                flippingTime={300} 
                 maxShadowOpacity={0.3} 
                 swipeDistance={10}
                 className="demo-book shadow-2xl"
