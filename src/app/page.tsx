@@ -33,6 +33,7 @@ export default function Home() {
               <Link 
                 href={`/category/${category.id}`} 
                 key={category.id}
+                prefetch={true}
                 className="group flex items-center gap-4 glass-panel rounded-xl p-5 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] border border-[var(--glass-border)]"
               >
                 <div className={`w-16 h-16 ${color.bg} rounded-lg flex items-center justify-center ${color.text} ${color.hoverBg} group-hover:text-white transition-colors`}>

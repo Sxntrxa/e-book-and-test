@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { categories } from '@/data/books';
@@ -42,6 +43,7 @@ export default function CategoryPage() {
           {category.quizUrl && (
             <Link 
               href={`/exam/${category.id}`}
+              prefetch={true}
               className="bg-green-600 hover:bg-green-500 px-5 py-2 rounded-full font-bold shadow-md transition-all transform hover:scale-105 flex items-center gap-2"
             >
               ทำแบบทดสอบ
@@ -62,13 +64,14 @@ export default function CategoryPage() {
             <Link 
               href={`/read/${book.id}`} 
               key={book.id}
+              prefetch={true}
               className="group flex flex-col items-center glass-panel rounded-lg p-3 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.03] border border-[var(--glass-border)]"
             >
               {/* หน้าปกจำลอง หรือ หน้าปกจริง */}
               <div className={`w-full aspect-[1/1.4] ${book.coverImageUrl ? 'bg-gray-100' : book.coverColor} rounded-md shadow-inner flex items-center justify-center mb-4 relative overflow-hidden`}>
                 <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity z-10"></div>
                 {book.coverImageUrl ? (
-                  <img src={book.coverImageUrl} alt={book.title} className="w-full h-full object-cover" />
+                  <Image src={book.coverImageUrl} alt={book.title} fill sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw" className="object-cover" priority={false} />
                 ) : (
                   <BookOpen size={48} className="text-white/50" />
                 )}
