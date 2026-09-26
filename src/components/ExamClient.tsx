@@ -56,7 +56,14 @@ export default function ExamClient({ courseId }: ExamClientProps) {
 
   // Load Quizzes and History
   useEffect(() => {
-    if (!category) return;
+  
+  useEffect(() => {
+    if (globalTimeRemaining === 0 && examState === 'TESTING') {
+      handleSubmitTest(true);
+    }
+  }, [globalTimeRemaining, examState]);
+
+  if (!category) return;
     
     // Load History
     const savedHistory = localStorage.getItem(`examHistory_${courseId}`);
@@ -106,7 +113,6 @@ export default function ExamClient({ courseId }: ExamClientProps) {
         if (prev === null) return null;
         if (prev <= 1) {
           clearInterval(timer);
-          handleSubmitTest(true); // Auto submit
           return 0;
         }
         return prev - 1;
@@ -115,6 +121,13 @@ export default function ExamClient({ courseId }: ExamClientProps) {
 
     return () => clearInterval(timer);
   }, [examState, currentIndex]);
+
+
+  useEffect(() => {
+    if (globalTimeRemaining === 0 && examState === 'TESTING') {
+      handleSubmitTest(true);
+    }
+  }, [globalTimeRemaining, examState]);
 
   if (!category) return <div className="p-8 text-white text-center">ไม่พบรายวิชา</div>;
   if (loading) return <div className="p-8 flex items-center justify-center min-h-screen text-white text-xl">กำลังโหลดข้อสอบ...</div>;
@@ -256,9 +269,10 @@ export default function ExamClient({ courseId }: ExamClientProps) {
 
   
   if (examState === 'SELECT_COUNT') {
-    const available = selectedChapterIndex === 'ALL' 
+    const availableRaw = selectedChapterIndex === 'ALL' 
       ? totalValidQuestions 
       : (allQuizzes[selectedChapterIndex as number]?.length || 0);
+    const available = selectedChapterIndex === 'ALL' ? Math.min(availableRaw, 100) : availableRaw;
       
     const chapterName = selectedChapterIndex === 'ALL' 
       ? 'สุ่มรวมทุกบท' 
