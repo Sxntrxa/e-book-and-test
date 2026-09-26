@@ -77,7 +77,7 @@ export default function CategoryPage() {
                 )}
                 <div className="absolute bottom-2 right-2 flex flex-col gap-1 items-end z-20">
                   {book.totalPages && (
-                    <div className="bg-black/60 text-[10px] px-2 py-0.5 rounded shadow-sm flex items-center gap-1 backdrop-blur-sm">
+                    <div className="bg-white/90 dark:bg-black/70 text-gray-800 dark:text-white text-[10px] px-2 py-0.5 rounded shadow-md flex items-center gap-1 backdrop-blur-sm border border-gray-200 dark:border-white/20">
                       <BookOpen size={10} /> {book.totalPages} หน้า
                     </div>
                   )}
