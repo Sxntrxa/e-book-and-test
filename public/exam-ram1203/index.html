@@ -493,7 +493,7 @@
         <a href="/category/psychology-intro" style="text-decoration: none; color: var(--accent); font-weight: 600; padding: 6px 12px; border-radius: 20px; background: var(--option-bg); display: flex; align-items: center; gap: 4px;">
             &#8592; กลับห้องสมุด
         </a>
-        <span class="nav-title" style="margin-left: 10px;">PSY1002</span>
+        <span class="nav-title" style="margin-left: 10px;">RAM1203</span>
         <div class="nav-actions">
             <button class="pill-btn" onclick="showScreen('history')" id="history-btn">📊 ประวัติ</button>
             <button class="pill-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
@@ -502,7 +502,7 @@
 
     <!-- ═══ Screen: Selection ═══ -->
     <div id="screen-selection" class="screen active">
-        <h1 class="large-title">จิตวิทยาเบื้องต้น</h1>
+        <h1 class="large-title">ศาสตร์การคิดเปลี่ยนโลก</h1>
         <p class="subtitle">เลือกบทที่ต้องการทดสอบ</p>
         <div class="card">
             <div class="card-header">บทเรียนทั้งหมด</div>
@@ -609,6 +609,7 @@
 
 <script>
     const TOTAL_CHAPTERS = 17;
+    const chapterNames = {"1": "StartUp", "2": "Storytelling", "3": "ครั้งที่ 10-11(ต่อ)", "4": "ครั้งที่ 10-11", "5": "ครั้งที่ 12", "6": "ครั้งที่ 2", "7": "ครั้งที่ 3", "8": "ครั้งที่ 4", "9": "ครั้งที่ 5", "10": "ครั้งที่ 6", "11": "ครั้งที่ 8", "12": "คำอธิบายรายวิชา", "13": "บทที่ 1", "14": "บทที่ 13", "15": "บทที่ 2", "16": "บทที่ 3", "17": "บทที่ 4"};
     const STORAGE_KEY = 'ram1203QuizHistory';
 
     // ─── Theme ───
@@ -657,7 +658,7 @@
 
             const btn = document.createElement('button');
             btn.className = 'chapter-btn';
-            btn.innerText = 'บทที่ ' + i;
+            btn.innerText = chapterNames[i];
             if (data !== null) {
                 btn.onclick = () => pickCount(i);
             } else {
@@ -730,7 +731,7 @@
             optsArray = [50, 60, 70, 80, 90, 100];
         } else {
             total = allQuizzes[chapter].length;
-            document.getElementById('count-title').innerText = 'บทที่ ' + chapter;
+            document.getElementById('count-title').innerText = chapterNames[chapter];
             document.getElementById('count-info').innerText = 'มีทั้งหมด ' + total + ' ข้อในบทนี้ เลือกจำนวนข้อที่ต้องการทำ';
             optsArray = [10, 20, 30, 40];
         }
@@ -781,7 +782,7 @@
         userAnswers = new Array(currentQuestions.length).fill(null);
         currentQuestionIndex = 0;
         startTime = new Date();
-        document.getElementById('quiz-title').innerText = chapter === 'all' ? 'สุ่มรวมทุกบท' : 'บทที่ ' + chapter;
+        document.getElementById('quiz-title').innerText = chapter === 'all' ? 'สุ่มรวมทุกบท' : chapterNames[chapter];
         document.getElementById('total-q-num').innerText = currentQuestions.length;
         
         // Timer logic
