@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { categories } from '@/data/books';
 import { ArrowLeft, CheckCircle, XCircle, Clock, History, AlertCircle, PlayCircle, BookOpen } from 'lucide-react';
 import Link from 'next/link';
@@ -31,28 +31,28 @@ const THAI_CHOICES = ['ก.', 'ข.', 'ค.', 'ง.', 'จ.', 'ฉ.'];
 export default function ExamClient({ courseId }: ExamClientProps) {
   const category = categories.find(c => c.id.toLowerCase() === courseId.toLowerCase());
   
-  const [allQuizzes, setAllQuizzes] = useState<(Question[] | null)[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [allQuizzes, setAllQuizzes] = useState, useMemo<(Question[] | null)[]>([]);
+  const [loading, setLoading] = useState, useMemo(true);
   
   // App State
-  const [examState, setExamState] = useState<'SELECT_CHAPTER' | 'SELECT_COUNT' | 'TESTING' | 'SUMMARY' | 'HISTORY'>('SELECT_CHAPTER');
+  const [examState, setExamState] = useState, useMemo<'SELECT_CHAPTER' | 'SELECT_COUNT' | 'TESTING' | 'SUMMARY' | 'HISTORY'>('SELECT_CHAPTER');
   
   // Selection
-  const [selectedChapterIndex, setSelectedChapterIndex] = useState<number | 'ALL'>('ALL');
-  const [selectedCount, setSelectedCount] = useState<number>(10);
-  const [selectedTimerMinutes, setSelectedTimerMinutes] = useState<number>(0);
+  const [selectedChapterIndex, setSelectedChapterIndex] = useState, useMemo<number | 'ALL'>('ALL');
+  const [selectedCount, setSelectedCount] = useState, useMemo<number>(10);
+  const [selectedTimerMinutes, setSelectedTimerMinutes] = useState, useMemo<number>(0);
   
   // Test Data
-  const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
-  const [userAnswers, setUserAnswers] = useState<(string | null)[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentQuestions, setCurrentQuestions] = useState, useMemo<Question[]>([]);
+  const [userAnswers, setUserAnswers] = useState, useMemo<(string | null)[]>([]);
+  const [currentIndex, setCurrentIndex] = useState, useMemo(0);
   
   // Time Tracking
-  const [timeSpentPerQuestion, setTimeSpentPerQuestion] = useState<number[]>([]);
-  const [globalTimeRemaining, setGlobalTimeRemaining] = useState<number | null>(null);
-  const [isSubmitConfirmOpen, setIsSubmitConfirmOpen] = useState(false);
-  const [examHistories, setExamHistories] = useState<ExamHistory[]>([]);
-  const [viewingHistoryIndex, setViewingHistoryIndex] = useState<number | null>(null);
+  const [timeSpentPerQuestion, setTimeSpentPerQuestion] = useState, useMemo<number[]>([]);
+  const [globalTimeRemaining, setGlobalTimeRemaining] = useState, useMemo<number | null>(null);
+  const [isSubmitConfirmOpen, setIsSubmitConfirmOpen] = useState, useMemo(false);
+  const [examHistories, setExamHistories] = useState, useMemo<ExamHistory[]>([]);
+  const [viewingHistoryIndex, setViewingHistoryIndex] = useState, useMemo<number | null>(null);
 
   // Load Quizzes and History
   useEffect(() => {
@@ -125,7 +125,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
   if (!category) return <div className="p-8 text-center">ไม่พบรายวิชา</div>;
   if (loading) return <div className="p-8 flex items-center justify-center min-h-screen text-xl">กำลังโหลดข้อสอบ...</div>;
 
-  const totalValidQuestions = allQuizzes.reduce((acc, q) => acc + (q ? q.length : 0), 0);
+  const totalValidQuestions = useMemo(() => allQuizzes.reduce((acc, q) => acc + (q ? q.length : 0), 0), [allQuizzes]);
 
   const startTest = (count: number) => {
     let pool: Question[] = [];
@@ -273,10 +273,16 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     );
   }
 
+  // Optimized available questions calculation
+  const availableRaw = useMemo(() => {
+    if (examState !== 'SELECT_COUNT') return 0;
+    if (selectedChapterIndex === 'ALL') {
+      return Array.from(new Map(allQuizzes.filter(q => q !== null).flat().map(item => [item.question, item])).values()).length;
+    }
+    return Array.from(new Map((allQuizzes[selectedChapterIndex as number] || []).map(item => [item.question, item])).values()).length;
+  }, [examState, selectedChapterIndex, allQuizzes]);
+
   if (examState === 'SELECT_COUNT') {
-    const availableRaw = selectedChapterIndex === 'ALL' 
-      ? Array.from(new Map(allQuizzes.filter(q => q !== null).flat().map(item => [item.question, item])).values()).length
-      : Array.from(new Map((allQuizzes[selectedChapterIndex as number] || []).map(item => [item.question, item])).values()).length;
     const available = selectedChapterIndex === 'ALL' ? Math.min(availableRaw, 100) : availableRaw;
       
     const chapterName = selectedChapterIndex === 'ALL' 

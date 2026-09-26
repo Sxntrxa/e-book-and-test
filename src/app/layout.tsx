@@ -29,10 +29,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SettingsProvider>
           {/* iOS Liquid Background */}
           <div className="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--blob-1)] blur-[120px] transition-colors duration-700"></div>
-            <div className="absolute top-[20%] right-[-10%] w-[30%] h-[50%] rounded-full bg-[var(--blob-2)] blur-[120px] transition-colors duration-700"></div>
-            <div className="absolute bottom-[-10%] left-[20%] w-[50%] h-[40%] rounded-full bg-[var(--blob-3)] blur-[140px] transition-colors duration-700"></div>
-            <div className="absolute bottom-[10%] right-[10%] w-[25%] h-[25%] rounded-full bg-[var(--blob-4)] blur-[100px] transition-colors duration-700"></div>
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--blob-1)] blur-[120px] transition-colors duration-700 transform-gpu"></div>
+            <div className="absolute top-[20%] right-[-10%] w-[30%] h-[50%] rounded-full bg-[var(--blob-2)] blur-[120px] transition-colors duration-700 transform-gpu"></div>
+            <div className="absolute bottom-[-10%] left-[20%] w-[50%] h-[40%] rounded-full bg-[var(--blob-3)] blur-[140px] transition-colors duration-700 transform-gpu"></div>
+            <div className="absolute bottom-[10%] right-[10%] w-[25%] h-[25%] rounded-full bg-[var(--blob-4)] blur-[100px] transition-colors duration-700 transform-gpu"></div>
           </div>
           
           <SettingsMenu />
