@@ -254,6 +254,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     );
   }
 
+  
   if (examState === 'SELECT_COUNT') {
     const available = selectedChapterIndex === 'ALL' 
       ? totalValidQuestions 
@@ -262,6 +263,19 @@ export default function ExamClient({ courseId }: ExamClientProps) {
     const chapterName = selectedChapterIndex === 'ALL' 
       ? 'สุ่มรวมทุกบท' 
       : category.books[selectedChapterIndex as number].title;
+
+    const countOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+    const validCounts = countOptions.filter(n => n <= available);
+    if (available > 0 && !validCounts.includes(available)) validCounts.push(available); // Add exact max if not in list
+
+    // Default to max if available < 10, else 10
+    useEffect(() => {
+      if (examState === 'SELECT_COUNT' && validCounts.length > 0) {
+        if (!validCounts.includes(selectedCount)) {
+          setSelectedCount(validCounts[0]);
+        }
+      }
+    }, [examState, validCounts]);
 
     return (
       <div className="min-h-screen bg-[#0f1115] text-white p-4 flex items-center justify-center">
@@ -276,7 +290,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
                 <button
                   key={m}
                   onClick={() => setSelectedTimerMinutes(m)}
-                  className={`p-2 rounded-lg text-sm font-medium transition ${selectedTimerMinutes === m ? 'bg-purple-600 text-white' : 'bg-[#2a2d35] text-gray-400 hover:bg-[#3a3d45]'}`}
+                  className={`p-2 rounded-lg text-sm font-medium transition ${selectedTimerMinutes === m ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30' : 'bg-[#2a2d35] text-gray-400 hover:bg-[#3a3d45]'}`}
                 >
                   {m === 0 ? 'ไม่จำกัด' : m}
                 </button>
@@ -284,25 +298,28 @@ export default function ExamClient({ courseId }: ExamClientProps) {
             </div>
           </div>
           
-          <div className="space-y-3">
-            {[10, 20, 30].map(n => (
-              <button 
-                key={n}
-                disabled={available < n}
-                onClick={() => startTest(n)}
-                className={`w-full p-4 rounded-xl font-medium transition flex items-center justify-center gap-2 ${available >= n ? 'bg-[#2a2d35] hover:bg-blue-600 text-white' : 'bg-[#202228] text-gray-600 cursor-not-allowed'}`}
-              >
-                <PlayCircle size={18} /> ทดสอบ {n} ข้อ
-              </button>
-            ))}
-            <button 
-              onClick={() => startTest(0)}
-              disabled={available === 0}
-              className={`w-full p-4 rounded-xl font-bold transition flex items-center justify-center gap-2 ${available > 0 ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-[#202228] text-gray-600 cursor-not-allowed'}`}
-            >
-              <PlayCircle size={18} /> ทดสอบทั้งหมด ({selectedChapterIndex === 'ALL' ? Math.min(available, 100) : available} ข้อ)
-            </button>
+          <div className="mb-8">
+            <label className="block text-sm text-gray-400 mb-3 text-left font-medium">จำนวนข้อที่ต้องการทดสอบ</label>
+            <div className="grid grid-cols-2 gap-3">
+              {validCounts.map(n => (
+                <button 
+                  key={n}
+                  onClick={() => setSelectedCount(n)}
+                  className={`p-3 rounded-xl font-medium transition flex items-center justify-center gap-2 ${selectedCount === n ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-[#2a2d35] text-gray-400 hover:bg-[#3a3d45]'}`}
+                >
+                  {n === available && n !== 100 && !countOptions.includes(n) ? `ทั้งหมด (${n})` : `${n} ข้อ`}
+                </button>
+              ))}
+            </div>
           </div>
+
+          <button 
+            onClick={() => startTest(selectedCount)}
+            disabled={available === 0}
+            className={`w-full p-4 rounded-xl font-bold text-lg transition flex items-center justify-center gap-2 ${available > 0 ? 'bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-600/30' : 'bg-[#202228] text-gray-600 cursor-not-allowed'}`}
+          >
+            <PlayCircle size={24} /> เริ่มทำข้อสอบ
+          </button>
           
           <button 
             onClick={() => setExamState('SELECT_CHAPTER')}
@@ -314,8 +331,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
       </div>
     );
   }
-
-  if (examState === 'TESTING') {
+if (examState === 'TESTING') {
     const q = currentQuestions[currentIndex];
     
     return (
@@ -599,12 +615,7 @@ export default function ExamClient({ courseId }: ExamClientProps) {
             >
               ทำแบบทดสอบใหม่
             </button>
-            <Link 
-              href={`/category/${courseId}`}
-              className="px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-lg transition flex items-center justify-center gap-2 text-white"
-            >
-              <BookOpen size={20} /> กลับไปหน้าหลัก (ห้องสมุด)
-            </Link>
+            
           </div>
         </div>
       </div>
