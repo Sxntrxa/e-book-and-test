@@ -37,6 +37,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     
     if (savedSize) {
       setFontSizeState(savedSize);
+      document.documentElement.classList.add(`font-${savedSize}`);
+    } else {
+      document.documentElement.classList.add('font-base');
     }
     setMounted(true);
   }, []);
@@ -52,6 +55,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const setFontSize = (newSize: FontSize) => {
+    document.documentElement.classList.remove(`font-${fontSize}`);
+    document.documentElement.classList.add(`font-${newSize}`);
     setFontSizeState(newSize);
     localStorage.setItem('fontSize', newSize);
   };
@@ -71,7 +76,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <SettingsContext.Provider value={providerValue}>
-      <div className={`${{ sm: 'text-sm', base: 'text-base', lg: 'text-lg' }[fontSize]} transition-all duration-300 h-full flex flex-col flex-1`}>
+      <div className="transition-all duration-300 h-full flex flex-col flex-1">
         {children}
       </div>
     </SettingsContext.Provider>

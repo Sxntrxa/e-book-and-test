@@ -126,3 +126,9 @@ html.dark .glass-button.active {
 .text-muted {
   color: var(--text-muted);
 }
+
+/* UI Scaling via Root Font Size */
+html.font-sm { font-size: 14px; }
+html.font-base { font-size: 16px; }
+html.font-lg { font-size: 18px; }
+html.font-xl { font-size: 20px; }
