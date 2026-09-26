@@ -653,18 +653,23 @@
         
         let totalAll = 0;
         
+        // Fetch all JSON files concurrently to make it blazing fast
+        const fetchPromises = [];
         for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
-            try {
-                const res = await fetch('/exam-ram1203/questions_ch' + i + '.json?v=' + Date.now());
-                if (res.ok) {
-                    const data = await res.json();
-                    allQuizzes[i] = data;
-                    totalAll += data.length;
-                } else {
-                    allQuizzes[i] = null;
-                }
-            } catch (e) {
-                allQuizzes[i] = null;
+            fetchPromises.push(
+                fetch('/exam-ram1203/questions_ch' + i + '.json')
+                    .then(res => res.ok ? res.json() : null)
+                    .catch(() => null)
+            );
+        }
+        
+        const results = await Promise.all(fetchPromises);
+        
+        for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
+            const data = results[i - 1];
+            allQuizzes[i] = data;
+            if (data) {
+                totalAll += data.length;
             }
         }
         
